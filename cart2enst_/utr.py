@@ -4,13 +4,11 @@ import phase1_utr
 def utr_selection(cart, candidates, log):
 
     filtered, reason, phase1_difference_type, phase1_decisive_criteria = _utr_selection_utr5(cart, candidates, log)
-    if len(filtered) == 1:
-        if filtered[0] is None:
-            print 'return value is None'
-        else:
-            return filtered[0], reason, phase1_difference_type, phase1_decisive_criteria
 
-    return cart, 'requires_utr3_selection', '.', '.'
+    if len(filtered) == 1:
+        return filtered[0], reason, phase1_difference_type, phase1_decisive_criteria
+
+    return filtered[0], 'requires_utr3_selection', '.', '.'
 
 
 def _utr_selection_utr5(cart, candidates, log):
@@ -29,7 +27,7 @@ def _utr_selection_utr5(cart, candidates, log):
 
     sel, difference_type, decisive_criteria = phase1_utr.utr_selection(candidates, log)
 
-    return [sel], 'phase1_utr_selection', difference_type, decisive_criteria
+    return sel, 'phase1_utr_selection', difference_type, decisive_criteria
 
 
 def _enst_utr5_encompass_cart_utr5(cart, enst):

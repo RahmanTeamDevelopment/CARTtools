@@ -21,22 +21,25 @@ def utr_selection(transcripts, log):
     log.write('\nUTR criteria applied to the following transcripts:\n')
     for t in transcripts:
         log.write('- '+t.id_+'\n')
-        log.write('  ' + str(t.strand) +'; UTR5 exons: ' + str(len(t.utr5_exons)) +'; UTR5 start: ' + str(t.utr5_start) + '; UTR5 length: ' + str(t.utr5_exonic_content_length) + '; UTR3 end: ' + str(t.utr3_end) + '; UTR3 length: ' + str(t.utr3_exonic_content_length) + '\n')
+        log.write('  ' + str(t.strand) + '; UTR5 exons: ' + str(len(t.utr5_exons)) + '; UTR5 start: ' +
+                  str(t.utr5_start) + '; UTR5 length: ' + str(t.utr5_exonic_content_length) + '; UTR3 end: '
+                  + str(t.utr3_end) + '; UTR3 length: ' + str(t.utr3_exonic_content_length) + '\n')
     log.write('\nUTR criteria selection steps:\n')
 
     dtypes = []
     dcrits = []
     candidates = transcripts
     while len(candidates) != 1:
-        candidates, dtype, dcrit = select_by_type(candidates, log)
-        if candidates is None:
-            return None, None, None
+        filtered, dtype, dcrit = select_by_type(candidates, log)
+        if filtered is None:
+            return candidates, None, None
+        candidates = filtered
         dtypes.append(dtype)
         dcrits.append(dcrit)
         log.write('   Filtered to '+str([t.id_ for t in candidates])+'\n')
 
     log.write('\n')
-    return candidates[0], ','.join(dtypes), ','.join(dcrits)
+    return [candidates[0]], ','.join(dtypes), ','.join(dcrits)
 
 
 def select_by_type(transcripts, log):
@@ -48,12 +51,12 @@ def select_by_type(transcripts, log):
         return candidates, dtype, dcrit
 
     # Difference type: UTR_ends
-    candidates, dtype, dcrit = analyse_difference_type_UTR_ends(transcripts, log)
+    candidates, dtype, dcrit = analyse_difference_type_utr_ends(transcripts, log)
     if candidates is not None:
         return candidates, dtype, dcrit
 
     # Difference type: UTR3
-    return analyse_difference_type_UTR3(transcripts, log)
+    return analyse_difference_type_utr3(transcripts, log)
 
 
 def analyse_difference_type_utr5_number_or_boundary(transcripts, log):
@@ -105,7 +108,7 @@ def analyse_difference_type_utr5_number_or_boundary(transcripts, log):
     return None, None, None
 
 
-def analyse_difference_type_UTR_ends(transcripts, log):
+def analyse_difference_type_utr_ends(transcripts, log):
     """Analyse difference type UTR ends"""
 
     # Check if there is difference in the UTR ends between any transcripts
@@ -150,7 +153,7 @@ def analyse_difference_type_UTR_ends(transcripts, log):
     return None, None, None
 
 
-def analyse_difference_type_UTR3(transcripts, log):
+def analyse_difference_type_utr3(transcripts, log):
     """Analyse difference tyoe UTR3"""
 
     # Check if there is difference in the UTR3 between any transcripts
@@ -282,13 +285,13 @@ def select_utr5_first_boundary(transcripts):
     if transcripts[0].strand == '+':
         most5prime_exons = transcripts[0].utr5_exons
     else:
-        most5prime_exons = [[x[1],x[0]] for x in transcripts[0].utr5_exons]
+        most5prime_exons = [[x[1], x[0]] for x in transcripts[0].utr5_exons]
     for i in range(1, len(transcripts)):
         t = transcripts[i]
         if t.strand == '+':
             exons = t.utr5_exons
         else:
-            exons = [[x[1],x[0]] for x in t.utr5_exons]
+            exons = [[x[1], x[0]] for x in t.utr5_exons]
         if most5prime_exons == exons:
             ret.append(t)
         elif (t.strand == '+' and exons < most5prime_exons) or (t.strand == '-' and exons > most5prime_exons):
@@ -302,13 +305,13 @@ def select_utr3_first_boundary(transcripts):
 
     ret = [transcripts[0]]
     if transcripts[0].strand == '+':
-        most3prime_exons = [[x[1],x[0]] for x in transcripts[0].utr3_exons[::-1]]
+        most3prime_exons = [[x[1], x[0]] for x in transcripts[0].utr3_exons[::-1]]
     else:
         most3prime_exons = transcripts[0].utr3_exons[::-1]
     for i in range(1, len(transcripts)):
         t = transcripts[i]
         if t.strand == '+':
-            exons = [[x[1],x[0]] for x in t.utr3_exons[::-1]]
+            exons = [[x[1], x[0]] for x in t.utr3_exons[::-1]]
         else:
             exons = t.utr3_exons[::-1]
         if most3prime_exons == exons:
