@@ -78,7 +78,7 @@ def run(options):
                     cart,
                     gene_id,
                     perfect_matches,
-                    'multiple_perfect_matches',
+                    'multiple_exact_matches',
                     '.',
                     '.',
                     '.'
@@ -92,7 +92,7 @@ def run(options):
                     cart,
                     gene_id,
                     [perfect_matches[0]],
-                    'perfect_match',
+                    'single_exact_match',
                     '.',
                     '.',
                     '.'
@@ -120,7 +120,7 @@ def run(options):
                     cart,
                     gene_id,
                     [identical_cds[0]],
-                    'only_cds_match',
+                    'single_cds_match',
                     '.',
                     '.',
                     '.'
@@ -134,8 +134,8 @@ def run(options):
                 out,
                 cart,
                 gene_id,
-                [selected],
-                'selected_cds_match',
+                selected,
+                'multiple_cds_matches',
                 reason,
                 phase1_difference_type,
                 phase1_decisive_criteria

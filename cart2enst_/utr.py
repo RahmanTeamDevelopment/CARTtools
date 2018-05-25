@@ -6,16 +6,16 @@ def utr_selection(cart, candidates, log):
     filtered, reason, phase1_difference_type, phase1_decisive_criteria = _utr_selection_utr5(cart, candidates, log)
 
     if len(filtered) == 1:
-        return filtered[0], reason, phase1_difference_type, phase1_decisive_criteria
+        return filtered, reason, phase1_difference_type, phase1_decisive_criteria
 
-    return filtered[0], 'requires_utr3_selection', '.', '.'
+    return filtered, 'non_unique_ensts', '.', '.'
 
 
 def _utr_selection_utr5(cart, candidates, log):
 
     filtered = [enst for enst in candidates if len(enst.utr5_exons) == len(cart.utr5_exons)]
     if len(filtered) == 1:
-        return [filtered[0]], 'single_same_num_of_utr5_exons', '.', '.'
+        return [filtered[0]], 'single_utr5_exon_number_match', '.', '.'
     if len(filtered) > 0:
         candidates = filtered
 
