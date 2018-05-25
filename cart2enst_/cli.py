@@ -46,6 +46,14 @@ def start_cli():
     )
 
     parser.add_option(
+        '--input',
+        default=None,
+        dest='input',
+        action='store',
+        help="Input file (list of CART IDs)"
+    )
+
+    parser.add_option(
         '--output',
         default=None,
         dest='output',

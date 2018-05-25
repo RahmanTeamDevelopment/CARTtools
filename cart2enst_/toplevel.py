@@ -44,12 +44,19 @@ def run(options):
     # Read CART and Ensembl data files
     cart_data, ensembl_tabix_file, ensembl_data, gene_synonyms = read_data(options)
 
+    if options.input:
+        cart_list = parser.read_input_file(options.input)
+
     sys.stdout.write('\nProcessing CARTs... ')
     sys.stdout.flush()
 
     # Iterate through the CARTs
     for gene_id, carts in cart_data.iteritems():
         for cart in carts:
+
+            if options.input:
+                if cart.id_ not in cart_list:
+                    continue
 
             # Find perfect matches or ENSTs with identical CDS
             if options.any_gene:

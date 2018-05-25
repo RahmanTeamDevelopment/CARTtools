@@ -87,3 +87,14 @@ def read_ensembl_transcripts(ensembl_tabix_file, cart):
         t = _parse_transcript_line(line)
         ret.append(t)
     return ret
+
+
+def read_input_file(fn):
+
+    ret = []
+    for line in open(fn):
+        line = line.strip()
+        if line == '' or line[0] == '#':
+            continue
+        ret.append(line)
+    return ret
