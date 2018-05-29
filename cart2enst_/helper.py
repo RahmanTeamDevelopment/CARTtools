@@ -14,7 +14,6 @@ class Transcript(object):
             strand,
             transcript_start,
             transcript_end,
-            coding_start,
             coding_start_genomic,
             coding_end_genomic,
             exons
@@ -27,7 +26,6 @@ class Transcript(object):
         self.strand = '+' if strand == 1 else '-'
         self.transcript_start = transcript_start
         self.transcript_end = transcript_end
-        self.coding_start = coding_start
         self.coding_start_genomic = coding_start_genomic
         self.coding_end_genomic = coding_end_genomic
         self.exons = exons

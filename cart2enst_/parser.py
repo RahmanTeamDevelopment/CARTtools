@@ -32,7 +32,6 @@ def _parse_transcript_line(line):
     strand = int(cols[5])
     transcript_start = int(cols[6])
     transcript_end = int(cols[7])
-    coding_start = int(cols[8]) - 1
     coding_start_genomic = int(cols[9]) - 1
 
     for i in range(1, len(cols) - 11, 2):
@@ -50,7 +49,6 @@ def _parse_transcript_line(line):
         strand=strand,
         transcript_start=transcript_start,
         transcript_end=transcript_end,
-        coding_start=coding_start,
         coding_start_genomic=coding_start_genomic,
         coding_end_genomic=coding_end_genomic,
         exons=exons
