@@ -35,7 +35,7 @@ def _enst_utr5_encompass_cart_utr5(cart, enst):
     if cart.strand == '+':
         return enst.transcript_start <= cart.transcript_start
     else:
-        return enst.transcript_start >= cart.transcript_start
+        return enst.transcript_end >= cart.transcript_end
 
 
 def utr_difference(cart, enst):
