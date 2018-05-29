@@ -33,7 +33,7 @@ class TestUTRSelection(TestCase):
     def test_utr_selection_utr5_single_encompassing_utr5(self, mocked_enst_utr5_encompass_cart_utr5):
 
         from cart2enst_ import utr
-        mocked_enst_utr5_encompass_cart_utr5.side_effect = self.mocked_enst_utr5_encompass_cart_utr5_side_effect_1
+        mocked_enst_utr5_encompass_cart_utr5.side_effect = lambda cart, enst: enst.id_ == 5
 
         cart = MagicMock(utr5_exons=[None] * 4)
         enst1 = MagicMock(utr5_exons=[None] * 4, id_=1)
@@ -55,8 +55,8 @@ class TestUTRSelection(TestCase):
     def test_utr_selection_utr5_phase1_utr_selection(self, mocked_enst_utr5_encompass_cart_utr5, mocked_phase1_utr_selection):
 
         from cart2enst_ import utr
-        mocked_enst_utr5_encompass_cart_utr5.side_effect = self.mocked_enst_utr5_encompass_cart_utr5_side_effect_2
-        mocked_phase1_utr_selection.side_effect = self.mocked_phase1_utr_selection_side_effect
+        mocked_enst_utr5_encompass_cart_utr5.side_effect = lambda cart, enst: True
+        mocked_phase1_utr_selection.side_effect = lambda candidates, log: ([candidates[1]], 'difference_type', 'decisive_criteria')
 
         cart = MagicMock(utr5_exons=[None] * 4)
         enst1 = MagicMock(utr5_exons=[None] * 4, id_=1)
@@ -76,7 +76,7 @@ class TestUTRSelection(TestCase):
     @patch('cart2enst_.utr._enst_utr5_encompass_cart_utr5')
     def test_utr_selection_utr5_no_utr5_exon_number_match(self, mocked_enst_utr5_encompass_cart_utr5):
         from cart2enst_ import utr
-        mocked_enst_utr5_encompass_cart_utr5.side_effect = self.mocked_enst_utr5_encompass_cart_utr5_side_effect_1
+        mocked_enst_utr5_encompass_cart_utr5.side_effect = lambda cart, enst: enst.id_ == 5
 
         cart = MagicMock(utr5_exons=[None] * 4)
         enst1 = MagicMock(utr5_exons=[None] * 2, id_=1)
@@ -97,8 +97,8 @@ class TestUTRSelection(TestCase):
     @patch('cart2enst_.utr._enst_utr5_encompass_cart_utr5')
     def test_utr_selection_no_encompassing_utr5(self, mocked_enst_utr5_encompass_cart_utr5, mocked_phase1_utr_selection):
         from cart2enst_ import utr
-        mocked_enst_utr5_encompass_cart_utr5.side_effect = self.mocked_enst_utr5_encompass_cart_utr5_side_effect_3
-        mocked_phase1_utr_selection.side_effect = self.mocked_phase1_utr_selection_side_effect
+        mocked_enst_utr5_encompass_cart_utr5.side_effect = lambda cart, enst: False
+        mocked_phase1_utr_selection.side_effect =  lambda candidates, log: ([candidates[1]], 'difference_type', 'decisive_criteria')
 
         cart = MagicMock(utr5_exons=[None] * 4)
         enst1 = MagicMock(utr5_exons=[None] * 1, id_=1)
@@ -120,8 +120,8 @@ class TestUTRSelection(TestCase):
     def test_utr_selection_no_utr5_exon_number_match_and_no_encompassing_utr5(self, mocked_enst_utr5_encompass_cart_utr5, mocked_phase1_utr_selection):
 
         from cart2enst_ import utr
-        mocked_enst_utr5_encompass_cart_utr5.side_effect = self.mocked_enst_utr5_encompass_cart_utr5_side_effect_3
-        mocked_phase1_utr_selection.side_effect = self.mocked_phase1_utr_selection_side_effect
+        mocked_enst_utr5_encompass_cart_utr5.side_effect = lambda cart, enst: False
+        mocked_phase1_utr_selection.side_effect = lambda candidates, log: ([candidates[1]], 'difference_type', 'decisive_criteria')
 
         cart = MagicMock(utr5_exons=[None] * 4)
         enst1 = MagicMock(utr5_exons=[None] * 1, id_=1)
@@ -136,29 +136,6 @@ class TestUTRSelection(TestCase):
         self.assertEquals(x, 'phase1_utr_selection')
         self.assertEquals(y, 'difference_type')
         self.assertEquals(z, 'decisive_criteria')
-
-
-    def mocked_enst_utr5_encompass_cart_utr5_side_effect_1(self, cart, enst):
-
-        return enst.id_ == 5
-
-
-    def mocked_enst_utr5_encompass_cart_utr5_side_effect_2(self, cart, enst):
-
-        return True
-
-
-    def mocked_enst_utr5_encompass_cart_utr5_side_effect_3(self, cart, enst):
-
-        return False
-
-
-    def mocked_phase1_utr_selection_side_effect(self, candidates, log):
-
-        return [candidates[1]], 'difference_type', 'decisive_criteria'
-
-
-
 
 
     def test_enst_utr5_encompass_cart_utr5_forward_strand(self):
