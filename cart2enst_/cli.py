@@ -2,7 +2,7 @@
 
 from optparse import OptionParser
 import toplevel
-from .version import __version__
+from main.version import __version__
 
 
 def start_cli():

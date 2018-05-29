@@ -4,7 +4,7 @@ import pysam
 import parser
 import helper
 from utr import utr_selection
-from .version import __version__
+from main.version import __version__
 
 
 def read_data(options):
