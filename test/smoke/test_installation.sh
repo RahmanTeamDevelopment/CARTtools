@@ -15,13 +15,13 @@ echo "Smoke test of installation:"
 
 if [ $? != 0 ]
 then
-    echo "${red}Error: CARTwheel $VERSION installation failed.${reset}"
+    echo "${red}Error: CARTtools $VERSION installation failed.${reset}"
     echo "---------------------------------------------------------------------------------------"
     echo ""
     exit 1
 fi
 
 
-echo "${green}CARTwheel $VERSION installation succeeded!${reset}"
+echo "${green}CARTtools $VERSION installation succeeded!${reset}"
 echo "---------------------------------------------------------------------------------------"
 echo ""

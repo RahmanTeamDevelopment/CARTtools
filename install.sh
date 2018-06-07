@@ -7,7 +7,7 @@ PIP_ARGS='--no-cache-dir --ignore-installed --force-reinstall'
 VERSION="$(python -c "from main.version import __version__; print __version__")"
 
 echo ""
-echo "Installing CARTwheel $VERSION ..."
+echo "Installing CARTtools $VERSION ..."
 echo ""
 
 virtualenv -p python2.7 env

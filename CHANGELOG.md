@@ -1,7 +1,7 @@
 
 # Changelog
 
-The latest version of this file can be found at the master branch of the [CARTer repository](https://github.com/.../CARTer).
+The latest version of this file can be found at the master branch of the ... repository](https://github.com/...).
 
 
 ## vX.X.X (date)

@@ -3,9 +3,9 @@ from setuptools import setup
 exec(open('main/version.py').read())
 
 setup(
-    name='CARTwheel',
+    name='CARTtools',
     version=__version__,
-    description='CARTwheel is ...',
+    description='CARTtools is ...',
     url='x@x',
     author='RahmanTeam',
     author_email='rahmanlab@icr.ac.uk',
