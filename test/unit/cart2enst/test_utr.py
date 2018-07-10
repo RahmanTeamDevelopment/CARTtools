@@ -12,7 +12,7 @@ class TestUTRSelection(TestCase):
 
     def test_utr_selection_utr5_single_utr5_exon_number_match(self):
 
-        from cart2enst_ import utr
+        from select_enst_ import utr
 
         cart = MagicMock(utr5_exons=[None]*4)
         enst1 = MagicMock(utr5_exons=[None]*2, id_=1)
@@ -32,7 +32,7 @@ class TestUTRSelection(TestCase):
     @patch('cart2enst_.utr._enst_utr5_encompass_cart_utr5')
     def test_utr_selection_utr5_single_encompassing_utr5(self, mocked_enst_utr5_encompass_cart_utr5):
 
-        from cart2enst_ import utr
+        from select_enst_ import utr
         mocked_enst_utr5_encompass_cart_utr5.side_effect = lambda cart, enst: enst.id_ == 5
 
         cart = MagicMock(utr5_exons=[None] * 4)
@@ -54,7 +54,7 @@ class TestUTRSelection(TestCase):
     @patch('cart2enst_.utr._enst_utr5_encompass_cart_utr5')
     def test_utr_selection_utr5_phase1_utr_selection(self, mocked_enst_utr5_encompass_cart_utr5, mocked_phase1_utr_selection):
 
-        from cart2enst_ import utr
+        from select_enst_ import utr
         mocked_enst_utr5_encompass_cart_utr5.side_effect = lambda cart, enst: True
         mocked_phase1_utr_selection.side_effect = lambda candidates, log: ([candidates[1]], 'difference_type', 'decisive_criteria')
 
@@ -75,7 +75,7 @@ class TestUTRSelection(TestCase):
 
     @patch('cart2enst_.utr._enst_utr5_encompass_cart_utr5')
     def test_utr_selection_utr5_no_utr5_exon_number_match(self, mocked_enst_utr5_encompass_cart_utr5):
-        from cart2enst_ import utr
+        from select_enst_ import utr
         mocked_enst_utr5_encompass_cart_utr5.side_effect = lambda cart, enst: enst.id_ == 5
 
         cart = MagicMock(utr5_exons=[None] * 4)
@@ -96,7 +96,7 @@ class TestUTRSelection(TestCase):
     @patch('cart2enst_.phase1_utr.utr_selection')
     @patch('cart2enst_.utr._enst_utr5_encompass_cart_utr5')
     def test_utr_selection_no_encompassing_utr5(self, mocked_enst_utr5_encompass_cart_utr5, mocked_phase1_utr_selection):
-        from cart2enst_ import utr
+        from select_enst_ import utr
         mocked_enst_utr5_encompass_cart_utr5.side_effect = lambda cart, enst: False
         mocked_phase1_utr_selection.side_effect =  lambda candidates, log: ([candidates[1]], 'difference_type', 'decisive_criteria')
 
@@ -119,7 +119,7 @@ class TestUTRSelection(TestCase):
     @patch('cart2enst_.utr._enst_utr5_encompass_cart_utr5')
     def test_utr_selection_no_utr5_exon_number_match_and_no_encompassing_utr5(self, mocked_enst_utr5_encompass_cart_utr5, mocked_phase1_utr_selection):
 
-        from cart2enst_ import utr
+        from select_enst_ import utr
         mocked_enst_utr5_encompass_cart_utr5.side_effect = lambda cart, enst: False
         mocked_phase1_utr_selection.side_effect = lambda candidates, log: ([candidates[1]], 'difference_type', 'decisive_criteria')
 
@@ -140,7 +140,7 @@ class TestUTRSelection(TestCase):
 
     def test_enst_utr5_encompass_cart_utr5_forward_strand(self):
 
-        from cart2enst_ import utr
+        from select_enst_ import utr
 
         transcript_1 = MagicMock(transcript_start=1000, transcript_end=2000, strand='+')
         transcript_2 = MagicMock(transcript_start=900, transcript_end=1700, strand='+')
@@ -155,7 +155,7 @@ class TestUTRSelection(TestCase):
 
     def test_enst_utr5_encompass_cart_utr5_reverse_strand(self):
 
-        from cart2enst_ import utr
+        from select_enst_ import utr
 
         transcript_1 = MagicMock(transcript_start=1000, transcript_end=2000, strand='-')
         transcript_2 = MagicMock(transcript_start=1200, transcript_end=1700, strand='-')
@@ -182,7 +182,7 @@ class TestUTRDifferences(TestCase):
 
     def test_utr_difference(self):
 
-        from cart2enst_ import utr
+        from select_enst_ import utr
 
         self.assertEquals(utr.utr_difference(self.transcript_1, self.transcript_1), '.')
         self.assertEquals(utr.utr_difference(self.transcript_1, self.transcript_2), 'UTR5')
@@ -194,7 +194,7 @@ class TestUTRDifferences(TestCase):
 
     def test_utr_exon_number_difference(self):
 
-        from cart2enst_ import utr
+        from select_enst_ import utr
 
         self.assertEquals(utr.utr_exon_number_difference(self.transcript_1, self.transcript_2), 'UTR5:-1')
         self.assertEquals(utr.utr_exon_number_difference(self.transcript_2, self.transcript_1), 'UTR5:+1')
