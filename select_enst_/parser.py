@@ -1,6 +1,6 @@
 import gzip
 
-from cart2enst_.helper import Transcript, Exon
+from select_enst_.helper import Transcript, Exon
 
 
 def read_transcript_db(fn):

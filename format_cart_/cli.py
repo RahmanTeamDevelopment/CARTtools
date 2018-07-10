@@ -8,41 +8,33 @@ from main.version import __version__
 def start_cli():
 
     parser = OptionParser(
-        description='cartwriter v{}'.format(__version__),
-        usage='CARTwheel/cartwriter <options>',
+        description='format_CART v{}'.format(__version__),
+        usage='CARTtools/format_cart <options>',
         version=__version__
     )
 
     parser.add_option(
         '--input',
-        default=None,
+        default='input',
         dest='input',
         action='store',
-        help="Input file name"
+        help="Input file name [default value: %default]"
     )
 
     parser.add_option(
-        '--ncbi',
+        '--ensembl',
         default=None,
-        dest='ncbi',
+        dest='ensembl',
         action='store',
-        help="RefSeqDB output file with NCBI interim mapping data"
+        help="Ensembl transcript database"
     )
 
     parser.add_option(
-        '--ucsc',
+        '--series',
         default=None,
-        dest='ucsc',
+        dest='series',
         action='store',
-        help="RefSeqDB output file with UCSC mapping data"
-    )
-
-    parser.add_option(
-        '--hgnc',
-        default=None,
-        dest='hgnc',
-        action='store',
-        help="HGNC ID to Gene Symbol dictionary file"
+        help="Series code (e.g. CART37A)"
     )
 
     parser.add_option(
@@ -70,19 +62,27 @@ def start_cli():
     )
 
     parser.add_option(
-        '--symbols',
-        default=None,
-        dest='symbols',
-        action='store',
-        help="Txt file for specifying gene symbols for missing HGNC IDs"
-    )
-
-    parser.add_option(
         '--annovar',
         default=False,
         dest='annovar',
         action='store_true',
         help="Create GenePred and FASTA files for Annovar [default value: %default]"
+    )
+
+    parser.add_option(
+        '--prev_cava_db',
+        default=None,
+        dest='prev_cava_db',
+        action='store',
+        help="CAVA db output of previous run from which CART numbering will be continued"
+    )
+
+    parser.add_option(
+        '--prev_ref',
+        default=None,
+        dest='prev_ref',
+        action='store',
+        help="Reference genome of previous run from which CART numbering will be continued"
     )
 
     (options, args) = parser.parse_args()

@@ -1,5 +1,4 @@
 import helper
-import reference
 import sys
 
 
@@ -9,10 +8,6 @@ def run(options):
 
     # Read gene symbols
     genes_symbols, symbols = helper.read_gene_symbols(options)
-
-    # Initialize reference sequence reader
-    ref = reference.Reference(options.ref)
-    print 'Reference genome file: {}\n'.format(options.ref)
 
     # Initialize transcript database writer
     tdb_writer = helper.initialize_transcript_db_writer(options)
@@ -24,16 +19,19 @@ def run(options):
     # Check for missing HGNC IDs
     helper.check_for_missing_hgnc_ids(options.input, db_ncbi, db_ucsc, genes_symbols, symbols)
 
-    # Initialize output files
-    out_source, out_missing, out_genepred, out_fasta, \
-    out_genepred_annovar, out_fasta_annovar, gbk_dir = helper.initialize_output_files(options)
+
+    out_source = open(options.output + '_source.txt', 'w')
+    out_source.write('#CARTID\trelated_NM\tsource_db\n')
+
+    out_missing = open(options.output + '_missing.txt', 'w')
+    out_missing.write('#CARTID\trelated_NM\treason_NCBI_db\treason_UCSC_db\n')
+
 
     # Iterating through input records
 
     sys.stdout.write('Processing data ... ')
     sys.stdout.flush()
     counter = counter_ncbi = counter_ucsc = counter_missing = 0
-    gff3_lines = {}
 
     for line in open(options.input):
         line = line.strip()
@@ -68,41 +66,12 @@ def run(options):
         # Adding transcript to database writer
         tdb_writer.add(transcript)
 
-        # Creating content of gff3 file
-        gff3_lines = helper.create_gff3_lines(transcript, gff3_lines)
-
-        # Writing to gp file
-        helper.output_genepred(transcript, out_genepred)
-
-        # Writing to gbk output
-        if options.gbk:
-            helper.output_gbk(transcript, ref, gbk_dir)
-
-        # Writing to fasta file
-        helper.output_fasta(transcript, out_fasta, ref)
-
-        # Writing annovar files
-        if options.annovar:
-            helper.output_genepred(transcript, out_genepred_annovar)
-            helper.output_fasta_annovar(transcript, out_fasta_annovar, ref)
-
         counter += 1
 
-    # Creating bgzipped, Tabix-index GFF3 output
-    helper.output_gff3(gff3_lines, options.output + '.gff')
+    tdb_writer.finalize(options)
 
-    # Finalize outputs
-    helper.finalize_outputs(
-        options,
-        tdb_writer,
-        out_source,
-        out_missing,
-        out_fasta,
-        out_genepred,
-        out_genepred_annovar,
-        out_fasta_annovar,
-        gbk_dir
-    )
+    out_source.close()
+    out_missing.close()
 
     # Print out summary info
     helper.print_summary_info(options, counter, counter_ncbi, counter_ucsc, counter_missing)

@@ -8,8 +8,8 @@ from main.version import __version__
 def start_cli():
 
     parser = OptionParser(
-        description='CART2ENST v{}'.format(__version__),
-        usage='CART2ENST/cart2enst <options>',
+        description='select_ENST v{}'.format(__version__),
+        usage='CARTtools/select_enst <options>',
         version=__version__
     )
 
