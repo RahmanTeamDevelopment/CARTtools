@@ -16,14 +16,16 @@ setup(
         'map_nm_',
         'select_enst_',
         'format_cart_',
-        'pipeline'
+        'pipeline',
+        'refseqsb_'
     ],
     scripts=[
         'bin/select_NM.py',
         'bin/map_NM.py',
         'bin/select_ENST.py',
         'bin/format_CART.py',
-        'bin/CART_pipeline.py'
+        'bin/CART_pipeline.py',
+        'bin/RefSeqDB.py'
     ],
     zip_safe=False
 )
