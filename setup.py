@@ -17,7 +17,8 @@ setup(
         'select_enst_',
         'format_cart_',
         'pipeline',
-        'refseqsb_'
+        'refseqsb_',
+        'refseqscan_'
     ],
     scripts=[
         'bin/select_NM.py',
@@ -25,7 +26,8 @@ setup(
         'bin/select_ENST.py',
         'bin/format_CART.py',
         'bin/CART_pipeline.py',
-        'bin/RefSeqDB.py'
+        'bin/RefSeqDB.py',
+        'bin/RefSeqScan.py'
     ],
     zip_safe=False
 )
