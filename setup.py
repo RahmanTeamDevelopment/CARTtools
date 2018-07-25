@@ -17,7 +17,7 @@ setup(
         'select_enst_',
         'format_cart_',
         'pipeline',
-        'refseqsb_',
+        'refseqdb_',
         'refseqscan_'
     ],
     scripts=[

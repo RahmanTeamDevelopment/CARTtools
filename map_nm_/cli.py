@@ -38,7 +38,7 @@ def start_cli():
     )
 
     parser.add_option(
-        '--hgnc',
+        '--hgncid_to_symbol',
         default=None,
         dest='hgnc',
         action='store',
@@ -54,7 +54,7 @@ def start_cli():
     )
 
     parser.add_option(
-        '--symbols',
+        '--more_symbols',
         default=None,
         dest='symbols',
         action='store',
