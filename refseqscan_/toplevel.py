@@ -12,9 +12,6 @@ def run(options):
     if options.reference is None:
         sys.exit('\nReference genome file not specified.')
 
-    # Welcome message
-    print '\n' + '=' * 100
-    print 'RefSeqScan v' + __version__ + ' started: ' + str(datetime.datetime.now()) + '\n'
 
     # Print reference genome name
     print 'RefSeq transcript db: ' + options.input
@@ -37,7 +34,9 @@ def run(options):
     sys.stdout.flush()
 
     # Iterate through transcripts
+    counter = 0
     for transcript in tdb.generator():
+
         # Retrieve reference sequence corresponding to transcript
         reference_sequence = get_reference_sequence(transcript, reference)
 
@@ -48,17 +47,17 @@ def run(options):
         # Write results to output file
         outfile.write('\t'.join([transcript.id, transcript.version, diffs]) + '\n')
 
+        counter += 1
+
     print '- Done'
 
     # Close output files
     outfile.close()
 
-    # Print output file name
-    print '\nOutput file (' + options.output + ') created'
+    print '\nA total of {} transcripts have been processed.'.format(counter)
 
-    # Goodbye message
-    print '\nFinished: ' + str(datetime.datetime.now())
-    print '=' * 100 + '\n'
+    # Print output file name
+    print '\nOutput file: {}'.format(options.output)
 
 
 def reverse_complement(s):

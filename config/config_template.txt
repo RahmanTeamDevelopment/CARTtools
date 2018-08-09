@@ -1,0 +1,21 @@
+reference_37 = /path/to/file
+reference_38 = /path/to/file
+
+[select_nm]
+input_genes = /path/to/file
+genes_dict = /path/to/file
+appris = /path/to/file
+
+[map_nm]
+hgncid_to_symbol = /path/to/file
+more_symbols = /path/to/file
+
+[ensembl_db]
+release_37 = .
+release_38 = .
+
+[select_enst]
+gene_synonyms = .
+
+[format_cart]
+series = .

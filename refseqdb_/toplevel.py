@@ -1,10 +1,12 @@
 from __future__ import division
 from transcripts import TranscriptDBWriter
 from urllib2 import urlopen
+import urllib
 import os
 import sys
 import refseq
 import mapping
+import urllib
 import datetime
 from main.version import __version__
 
@@ -19,11 +21,6 @@ def run(options):
         print '\nAllowed values for option -b are \"GRCh37\" or \"GRCh38\".\n'
         sys.exit()
 
-    # Welcome message
-    print '\n' + '=' * 100
-    now = str(datetime.datetime.now())
-    now = now[:now.find('.')]
-    print 'RefSeqDB v{} started: {}\n'.format(__version__, now)
 
     if options.mapping == 'ncbi':
         print '- RefSeq interim release, 2017-01-13 (incl. mapping) -\n'
@@ -82,6 +79,8 @@ def run(options):
         print '- done'
 
     # Iterate through available RefSeq data files
+    counter_incl = 0
+    counter_excl = 0
     for i in range(len(urls)):
 
         print_progress_info(i + 1, len(urls))
@@ -89,15 +88,13 @@ def run(options):
         # Download RefSeq data file and avoid timeout error
         while True:
             try:
-                f = urlopen(urls[i])
+                urllib.urlretrieve(urls[i], 'refseqdata.gz')
                 break
             except:
                 pass
-        with open('refseqdata.gz', "wb") as datafile:
-            datafile.write(f.read())
 
         # Process RefSeq data file
-        refseq.process_refseq_file('refseqdata.gz', mappings, tdb_writer, out_incl, out_excl)
+        counter_incl, counter_excl = refseq.process_refseq_file('refseqdata.gz', mappings, tdb_writer, out_incl, out_excl, counter_incl, counter_excl)
 
         # Remove RefSeq data file
         os.remove('refseqdata.gz')
@@ -111,17 +108,14 @@ def run(options):
     out_incl.close()
     out_excl.close()
 
+    print '\nSummary:'
+    print ' - NMs included in the database: {}'.format(counter_incl)
+    print ' - NMs excluded from the database: {}'.format(counter_excl)
 
-
-    print '\nOutput files created: '
+    print '\nOutput files created:'
     print ' - {}.gz (+ .tbi)'.format(options.output)
     print ' - {}_included.txt'.format(options.output)
     print ' - {}_excluded.txt'.format(options.output)
-
-    now = str(datetime.datetime.now())
-    now = now[:now.find('.')]
-    print '\nFinished: {}'.format(now)
-    print '=' * 100 + '\n'
 
 
 def print_progress_info(counter, N):

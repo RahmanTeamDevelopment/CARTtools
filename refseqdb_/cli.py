@@ -3,6 +3,23 @@
 from optparse import OptionParser
 import toplevel
 from main.version import __version__
+import datetime
+
+
+def welcome(name):
+
+    print '\n' + '=' * 100
+    now = str(datetime.datetime.now())
+    now = now[:now.find('.')]
+    print '{} started: {}\n'.format(name, now)
+
+
+def goodbye(name):
+
+    now = str(datetime.datetime.now())
+    now = now[:now.find('.')]
+    print '\n{} finished: {}'.format(name, now)
+    print '=' * 100 + '\n'
 
 
 def start_cli():
@@ -38,4 +55,9 @@ def start_cli():
     )
 
     (options, args) = parser.parse_args()
+
+    welcome('RefSeqDB')
+
     toplevel.run(options)
+
+    goodbye('RefSeqDB')

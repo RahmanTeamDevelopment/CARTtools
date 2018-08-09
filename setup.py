@@ -12,22 +12,24 @@ setup(
     licence='MIT',
     packages=[
         'main',
-        'select_nm_',
-        'map_nm_',
-        'select_enst_',
-        'format_cart_',
+        'selectnms_',
+        'mapnms_',
+        'selectensts_',
+        'formatcarts_',
         'pipeline',
         'refseqdb_',
-        'refseqscan_'
+        'refseqscan_',
+        'ensembldb_'
     ],
     scripts=[
-        'bin/select_NM.py',
-        'bin/map_NM.py',
-        'bin/select_ENST.py',
-        'bin/format_CART.py',
-        'bin/CART_pipeline.py',
+        'bin/SelectNMs.py',
+        'bin/MapNMs.py',
+        'bin/SelectENSTs.py',
+        'bin/FormatCARTs.py',
+        'bin/CARTpipeline.py',
         'bin/RefSeqDB.py',
-        'bin/RefSeqScan.py'
+        'bin/RefSeqScan.py',
+        'bin/EnsemblDB.py'
     ],
     zip_safe=False
 )

@@ -26,23 +26,25 @@ def access_refseq_files():
     return ret
 
 
-def process_refseq_file(fn, mappings, tdb_writer, out_incl, out_excl):
+def process_refseq_file(fn, mappings, tdb_writer, out_incl, out_excl, counter_incl, counter_excl):
     """Process RefSeq data file"""
+
     record = []
     for line in gzip.open(fn, 'r'):
         line = line.strip()
         if line.startswith('LOCUS'):
-            process_record(mappings, tdb_writer, out_incl, out_excl, record)
+            counter_incl, counter_excl = process_record(mappings, tdb_writer, out_incl, out_excl, record, counter_incl, counter_excl)
             record = []
         record.append(line)
-    process_record(mappings, tdb_writer, out_incl, out_excl, record)
+    counter_incl, counter_excl = process_record(mappings, tdb_writer, out_incl, out_excl, record, counter_incl, counter_excl)
+    return counter_incl, counter_excl
 
 
-def process_record(mappings, tdb_writer, out_incl, out_excl, record):
+def process_record(mappings, tdb_writer, out_incl, out_excl, record, counter_incl, counter_excl):
     """Process a RefSeq record"""
 
     if len(record) == 0:
-        return
+        return counter_incl, counter_excl
 
     # Split record to LOCUS, VERSION, FEATURES and ORIGIN sections
     sections = split_sections(record)
@@ -51,7 +53,7 @@ def process_record(mappings, tdb_writer, out_incl, out_excl, record):
     locusline = sections['LOCUS'][0]
     id = locusline.split()[1]
     if not id.startswith('NM_'):
-        return
+        return counter_incl, counter_excl
 
     # Retrieve version
     versionline = sections['VERSION'][0]
@@ -62,14 +64,14 @@ def process_record(mappings, tdb_writer, out_incl, out_excl, record):
     cdna_coding_start, cdna_coding_end, hgncid = process_features_section(sections['FEATURES'])
     if cdna_coding_start is None:
         out_excl.write('\t'.join([id, 'joined_cds']) + '\n')
-        return
+        return counter_incl, counter_excl + 1
 
     # Process ORIGIN section
     sequence = process_origin_section(sections['ORIGIN'])
 
     # Check for potential issues in the data
     if check_for_issues(cdna_coding_start, cdna_coding_end, sequence, version, hgncid, mappings, id, out_excl):
-        return
+        return counter_incl, counter_excl + 1
 
     # Pick single mapping
     mapping = mappings[id][0]
@@ -80,11 +82,12 @@ def process_record(mappings, tdb_writer, out_incl, out_excl, record):
     # Check for incorrect CDS length
     if transcript.get_cds_length() % 3 != 0:
         out_excl.write('\t'.join([id, 'incorrect_cds_length']) + '\n')
-        return
+        return counter_incl, counter_excl + 1
 
     # Add transcript to database
     tdb_writer.add(transcript)
     out_incl.write('\t'.join([transcript.id, transcript.hgnc_id]) + '\n')
+    return counter_incl + 1, counter_excl
 
 
 def split_sections(record):

@@ -1,7 +1,9 @@
+#!env/bin/python
+
 from optparse import OptionParser
 import toplevel
-import datetime
 from main.version import __version__
+import datetime
 
 
 def welcome(name):
@@ -23,8 +25,8 @@ def goodbye(name):
 def start_cli():
 
     parser = OptionParser(
-        description='RefSeqScan v{}'.format(__version__),
-        usage='CARTtools/refseqscan <options>',
+        description='EnsemblDB v{}'.format(__version__),
+        usage='CARTtools/ensembldb <options>',
         version=__version__
     )
 
@@ -33,29 +35,29 @@ def start_cli():
         default=None,
         dest='input',
         action='store',
-        help='Input RefSeq database file'
-    )
-
-    parser.add_option(
-        '--reference',
-        default=None,
-        dest='reference',
-        action='store',
-        help='Reference genome file'
+        help="Input filename (list of ENST IDs)"
     )
 
     parser.add_option(
         '--output',
-        default='output.txt',
+        default=None,
         dest='output',
         action='store',
-        help='Output file name [default value: %default]'
+        help="Output filename prefix"
+    )
+
+    parser.add_option(
+        '--release',
+        default=None,
+        dest='ensembl',
+        action='store',
+        help="Ensembl release version"
     )
 
     (options, args) = parser.parse_args()
 
-    welcome('RefSeqScan')
+    welcome('EnsemblDB')
 
     toplevel.run(options)
 
-    goodbye('RefSeqScan')
+    goodbye('EnsemblDB')
