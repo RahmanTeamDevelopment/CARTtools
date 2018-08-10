@@ -522,8 +522,8 @@ def initialize_transcript_db_writer(options):
     ]
     tdb_writer = transcripts.TranscriptDBWriter(
         options.output + '_cava',
-        source='CARTWriter ' + __version__,
-        build='GRCh37',
+        source='?',
+        build='?',
         columns=columns
     )
     return tdb_writer
