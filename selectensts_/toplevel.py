@@ -93,7 +93,7 @@ def run(options):
                     '.'
                 )
                 counter += 1
-                counter_problem += 1
+                counter_selected += 1
                 continue
 
             # If there is only one perfect match
