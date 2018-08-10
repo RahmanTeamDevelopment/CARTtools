@@ -42,18 +42,18 @@ ROOTPATH=$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pwd)
 
 
 # Run SelectNMs
-msg "Running SelectNMs"
-$ROOTPATH/selectnms --input_genes $inputgenes --appr $apprisfile --refsdb refseqdb_GRCh37_ncbi.gz --refss refseqscan_output_GRCh37_ncbi.txt --genes $genesdict --build GRCh37 --series CART37A --out selected_nms_GRCh37
+#msg "Running SelectNMs"
+#$ROOTPATH/selectnms --input_genes $inputgenes --appr $apprisfile --refsdb refseqdb_GRCh37_ncbi.gz --refss refseqscan_output_GRCh37_ncbi.txt --genes $genesdict --build GRCh37 --series CART37A --out selected_nms_GRCh37
 
 
 # Run MapNMs (GRCh37)
-msg "Running MapNMs (GRCh37)"
-$ROOTPATH/mapnms --input selected_nms_GRCh37_selected.txt --ncbi refseqdb_GRCh37_ncbi.gz --ucsc refseqdb_GRCh37_ucsc.gz --hgncid_to_symbol $hgncidtosymbol --output mapped_nms_GRCh37
+#msg "Running MapNMs (GRCh37)"
+#$ROOTPATH/mapnms --input selected_nms_GRCh37_selected.txt --ncbi refseqdb_GRCh37_ncbi.gz --ucsc refseqdb_GRCh37_ucsc.gz --hgncid_to_symbol $hgncidtosymbol --output mapped_nms_GRCh37
 
 
 # Run EnsemblDB (GRCh37)
-msg "Running EnsemblDB (GRCh37)"
-$ROOTPATH/ensembldb --release $ens37 --output ensembl_$ens37
+#msg "Running EnsemblDB (GRCh37)"
+#$ROOTPATH/ensembldb --release $ens37 --output ensembl_$ens37
 
 # Run EnsemblDB (GRCh38)
 #msg "Running EnsemblDB (GRCh38)"
@@ -67,4 +67,4 @@ $ROOTPATH/selectensts --mapped_nms mapped_nms_GRCh37.gz --ensembl_data ensembl_$
 
 # Run FormatCARTs (GRCh37)
 msg "Running FormatCARTs (GRCh37)"
-$ROOTPATH/formatcarts --input selected_ensts_GRCh37.txt --ensembl ensembl_$ens37.gz --series $series --ref $ref37 --output carts37
+$ROOTPATH/formatcarts --input selected_ensts_GRCh37.txt --ensembl ensembl_$ens37.gz --series $series --ref $ref37 --output $output

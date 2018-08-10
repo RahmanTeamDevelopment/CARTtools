@@ -19,3 +19,4 @@ gene_synonyms = .
 
 [format_cart]
 series = .
+output = .

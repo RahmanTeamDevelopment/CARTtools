@@ -42,7 +42,8 @@ def map_keys(config):
         'ensembl_db.release_38': 'ens38',
         'map_nm.hgncid_to_symbol': 'hgncidtosymbol',
         'select_enst.gene_synonyms': 'genesynonyms',
-        'format_cart.series': 'series'
+        'format_cart.series': 'series',
+        'format_cart.output': 'output'
     }
 
     for k in map_of_keys.keys():
@@ -61,7 +62,8 @@ def add_default_values(c, rootdir):
         'ens37': '75',
         'ens38': '92',
         'genesynonyms': '{}/default/gene_synonyms.txt'.format(rootdir),
-        'series': 'CART37A'
+        'series': 'CART37A',
+        'output': 'CART37A'
     }
 
     for k, v in default_values.iteritems():
