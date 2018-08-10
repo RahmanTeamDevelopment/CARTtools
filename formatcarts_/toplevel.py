@@ -51,7 +51,7 @@ def run(options):
         cols = line.split()
         hgnc_id = cols[2]
         enst = cols[3]
-        
+
         if enst == '.':
             continue
 

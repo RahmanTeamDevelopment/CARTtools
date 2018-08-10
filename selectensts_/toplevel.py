@@ -49,6 +49,8 @@ def run(options):
 
     # Iterate through the NMs
     counter = 0
+    counter_selected = 0
+    counter_problem = 0
     for gene, NMs in NMs_data.iteritems():
         for nm in NMs:
 
@@ -75,6 +77,7 @@ def run(options):
 
             if perfect_matches is None:
                 counter += 1
+                counter_problem += 1
                 continue
 
             # If there are multiple perfect matches
@@ -90,6 +93,7 @@ def run(options):
                     '.'
                 )
                 counter += 1
+                counter_problem += 1
                 continue
 
             # If there is only one perfect match
@@ -105,6 +109,7 @@ def run(options):
                     '.'
                 )
                 counter += 1
+                counter_selected += 1
                 continue
 
             # If there is no ENST with identical CDS
@@ -120,6 +125,7 @@ def run(options):
                     '.'
                 )
                 counter += 1
+                counter_problem += 1
                 continue
 
             # If there is only one ENST with identical CDS
@@ -135,6 +141,7 @@ def run(options):
                     '.'
                 )
                 counter += 1
+                counter_selected += 1
                 continue
 
             # If there are multiple ENSTs with identical CDS, apply UTR selection
@@ -151,10 +158,12 @@ def run(options):
                 phase1_decisive_criteria
             )
             counter += 1
+            counter_selected += 1
 
     print 'Done.'
 
     print '\nA total of {} NMs have been processed (-> {})'.format(counter, options.output + '.txt')
+    print 'ENST selected for {} NMs, no selection made for {} NMs'.format(counter_selected, counter_problem)
 
     # Close output files
     out.close()
