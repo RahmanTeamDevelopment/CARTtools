@@ -49,8 +49,11 @@ def run(options):
         if line == '' or line.startswith('#'):
             continue
         cols = line.split()
-        hgnc_id = cols[2][5:]
+        hgnc_id = cols[2]
         enst = cols[3]
+        
+        if enst == '.':
+            continue
 
         # Add ENST to missing list if not found in Ensembl database
         if enst not in ensembl_db:
