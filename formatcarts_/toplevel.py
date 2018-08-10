@@ -32,7 +32,7 @@ def run(options):
 
     # Initialize progress info
     sys.stdout.write('Processing {} ENSTs read from {} ... '.format(
-            helper.number_of_input_carts(options.input), options.input
+            helper.number_of_input_ensts(options.input), options.input
         )
     )
     sys.stdout.flush()

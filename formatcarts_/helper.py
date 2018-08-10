@@ -449,14 +449,16 @@ def complement(b):
         return x.lower()
 
 
-def number_of_input_carts(fn):
+def number_of_input_ensts(fn):
 
     ret = 0
     for line in open(fn):
         line = line.strip()
         if line=='' or line.startswith('#'):
             continue
-        ret += 1
+        cols = line.split('\t')
+        if cols[3] != '.':
+            ret += 1
     return ret
 
 
