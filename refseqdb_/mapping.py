@@ -79,7 +79,7 @@ def download_ncbi_mapping(build):
             'interim_GRCh37.p13_top_level_2017-01-13.gff3.gz'
         ]
     else:
-        ftpsite = 'ftp://ftp.ncbi.nlm.nih.gov/genomes/Homo_sapiens/GRCh38.p10_interim_annotation/'
+        ftpsite = 'ftp://ftp.ncbi.nlm.nih.gov/genomes/Homo_sapiens/ARCHIVE/ANNOTATION_RELEASE.108/GRCh38.p10_interim_annotation/'
         files = [
             'interim_GRCh38.p10_knownrefseq_alignments_2017-01-13.bam',
             'interim_GRCh38.p10_top_level_2017-01-13.gff3.gz'

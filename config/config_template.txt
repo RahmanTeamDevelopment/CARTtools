@@ -1,22 +1,24 @@
 reference_37 = /path/to/file
 reference_38 = /path/to/file
 
-[select_nm]
+output_prefix = .
+
+[SelectNMs]
 input_genes = /path/to/file
 genes_dict = /path/to/file
 appris = /path/to/file
 
-[map_nm]
+[MapNMs]
 hgncid_to_symbol = /path/to/file
 more_symbols = /path/to/file
 
-[ensembl_db]
+[EnsemblDB]
 release_37 = .
 release_38 = .
 
-[select_enst]
+[SelectENSTs]
 gene_synonyms = .
 
-[format_cart]
-series = .
-output = .
+[FormatCARTs]
+series_37 = .
+series_38 = .

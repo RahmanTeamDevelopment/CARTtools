@@ -16,7 +16,7 @@ def parse_config_file(fn):
                 s = line[1:-1]
                 if '[' in s or ']' in s or '=' in s:
                     continue
-                section = s
+                section = s.lower()
 
             elif line.count('=') == 1:
                 key, value = line.split('=')
@@ -35,15 +35,16 @@ def map_keys(config):
     map_of_keys = {
         'reference_37': 'ref37',
         'reference_38': 'ref38',
-        'select_nm.input_genes': 'inputgenes',
-        'select_nm.appris': 'apprisfile',
-        'select_nm.genes_dict': 'genesdict',
-        'ensembl_db.release_37': 'ens37',
-        'ensembl_db.release_38': 'ens38',
-        'map_nm.hgncid_to_symbol': 'hgncidtosymbol',
-        'select_enst.gene_synonyms': 'genesynonyms',
-        'format_cart.series': 'series',
-        'format_cart.output': 'output'
+        'selectnms.input_genes': 'inputgenes',
+        'selectnms.appris': 'apprisfile',
+        'selectnms.genes_dict': 'genesdict',
+        'ensembldb.release_37': 'ens37',
+        'ensembldb.release_38': 'ens38',
+        'mapnms.hgncid_to_symbol': 'hgncidtosymbol',
+        'selectensts.gene_synonyms': 'genesynonyms',
+        'formatcarts.series_37': 'series37',
+        'formatcarts.series_38': 'series38',
+        'output_prefix': 'prefix'
     }
 
     for k in map_of_keys.keys():
@@ -57,13 +58,14 @@ def add_default_values(c, rootdir):
 
     default_values = {
         'apprisfile': '{}/default/appris_refseq107.txt'.format(rootdir),
-        'genesdict': '{}/default/hgnc_biomart-05052017.txt'.format(rootdir),
+        'genesdict': '{}/default/20180104_hgnc_biomart.txt'.format(rootdir),
         'hgncidtosymbol': '{}/default/20180104_HGNCID_to_GeneSymbol_from_HGNC_BioMart.txt'.format(rootdir),
         'ens37': '75',
         'ens38': '92',
         'genesynonyms': '{}/default/gene_synonyms.txt'.format(rootdir),
-        'series': 'CART37A',
-        'output': 'CART37A'
+        'series37': 'CART37A',
+        'series38': 'CART38A',
+        'prefix': 'output'
     }
 
     for k, v in default_values.iteritems():
@@ -75,7 +77,8 @@ def add_default_values(c, rootdir):
 
 def run(options):
 
-    rootdir = os.path.dirname(os.path.realpath(__file__)).split('/env')[0]
+    full = os.path.dirname(os.path.realpath(__file__))
+    rootdir = full[:full.rfind('/env')]
 
     config = parse_config_file(options.config)
     mapped_args = map_keys(config)
@@ -86,4 +89,3 @@ def run(options):
         args_to_pass.append('{}:{}'.format(k, v))
 
     subprocess.call(['{}/pipeline/pipeline.sh'.format(rootdir)] + args_to_pass)
-

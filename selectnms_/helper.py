@@ -52,9 +52,9 @@ def initialize_output_files(options):
     """Initialize output files"""
 
     # Output files
-    selected = open(options.out + '_selected.txt', 'w')
-    missing = open(options.out + '_missing.txt', 'w')
-    log = open(options.out + '_log.txt', 'w')
+    selected = open(options.out + '_auto_selected.txt', 'w')
+    missing = open(options.out + '_auto_missing.txt', 'w')
+    log = open(options.out + '_auto_log.txt', 'w')
 
     # Write headers
     selected.write('#' + '\t'.join(

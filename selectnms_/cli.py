@@ -57,11 +57,11 @@ def start_cli():
     )
 
     parser.add_option(
-        '--refss',
+        '--refschk',
         default=None,
         dest='refss',
         action='store',
-        help="refseq_scan output file"
+        help="RefSeqCheck output file"
     )
 
     parser.add_option(
@@ -81,19 +81,28 @@ def start_cli():
     )
 
     parser.add_option(
-        '--series',
-        dest='series',
-        default=None,
-        action='store',
-        help="CART series"
-    )
-
-    parser.add_option(
-        '--out',
+        '--out_auto',
         dest='out',
         action='store',
         help="Output file name"
     )
+
+    parser.add_option(
+        '--out_final',
+        dest='out_final',
+        action='store',
+        help="..."
+    )
+
+    parser.add_option(
+        '--refsdbinc',
+        dest='refsdbinc',
+        action='store',
+        help="..."
+    )
+
+
+
 
     (options, args) = parser.parse_args()
 

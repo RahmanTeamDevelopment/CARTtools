@@ -17,9 +17,6 @@ def run(options):
 def process_genes(options, gene_dict, appris, appris_principal, refseq_db, refseqscan, selected, missing, log):
     """Iterate through inputed genes and process each one"""
 
-    sys.stdout.write('\nProcessing data ... ')
-    sys.stdout.flush()
-
     # Iterate through HGNC IDs from input file
     counter = 0
     for hgncid in open(options.hgnc):
@@ -44,9 +41,6 @@ def process_genes(options, gene_dict, appris, appris_principal, refseq_db, refse
 
         # Select and output transcript
         select_transcript(transcripts, refseqscan, appris_principal, selected, missing, log, hgncid)
-
-
-    print 'done'
 
     # Close output files
     selected.close()

@@ -48,7 +48,7 @@ def run(options):
                 'ftp://ftp.ncbi.nlm.nih.gov/genomes/Homo_sapiens/GRCh37.p13_interim_annotation/interim_GRCh37.p13_rna.gbk.gz']
         else:
             urls = [
-                'ftp://ftp.ncbi.nlm.nih.gov/genomes/Homo_sapiens/GRCh38.p10_interim_annotation/interim_GRCh38.p10_rna.gbk.gz']
+                'ftp://ftp.ncbi.nlm.nih.gov/genomes/Homo_sapiens/ARCHIVE/ANNOTATION_RELEASE.108/GRCh38.p10_interim_annotation/interim_GRCh38.p10_rna.gbk.gz']
 
     # Download and read mapping data
     sys.stdout.write('\rProcessing {} mapping data ... '.format(options.build))

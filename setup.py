@@ -18,8 +18,9 @@ setup(
         'formatcarts_',
         'pipeline',
         'refseqdb_',
-        'refseqscan_',
-        'ensembldb_'
+        'refseqcheck_',
+        'ensembldb_',
+        'summarize_'
     ],
     scripts=[
         'bin/SelectNMs.py',
@@ -28,8 +29,9 @@ setup(
         'bin/FormatCARTs.py',
         'bin/CARTpipeline.py',
         'bin/RefSeqDB.py',
-        'bin/RefSeqScan.py',
-        'bin/EnsemblDB.py'
+        'bin/RefSeqCheck.py',
+        'bin/EnsemblDB.py',
+        'bin/Summarize.py'
     ],
     zip_safe=False
 )

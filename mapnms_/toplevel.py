@@ -2,9 +2,24 @@ import helper
 import sys
 
 
+def count_input_nms(fn):
+
+    count = 0
+    for line in open(fn):
+        if line[0] == '#':
+            continue
+        line = line.strip()
+        cols = line.split('\t')
+        if cols[-2] != '.':
+            count += 1
+    return count
+
+
 def run(options):
 
-    print 'Input file: {} ({} transcripts)\n'.format(options.input, helper.number_of_input_records(options.input))
+    num_of_nms = count_input_nms(options.input)
+
+    print 'Input file: {} ({} transcripts)\n'.format(options.input, num_of_nms)
 
     # Read gene symbols
     genes_symbols, symbols = helper.read_gene_symbols(options)
@@ -39,7 +54,10 @@ def run(options):
             continue
 
         cols = line.split()
-        nm = cols[1]
+        nm = cols[-2]
+
+        if nm == '.':
+            continue
 
         # Create transcript object and write to _source and _missing output files
         transcript, counter_ncbi, counter_ucsc, counter_missing = helper.create_transcript_object(
