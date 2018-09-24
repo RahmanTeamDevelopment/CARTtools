@@ -88,10 +88,10 @@ $ROOTPATH/selectensts --mapped_nms ${od}/${prefix}_mapped_nms_GRCh38.gz --ensemb
 # Run FormatCARTs for GRCh37 and GRCh38
 msg "Running FormatCARTs for GRCh37"
 $ROOTPATH/formatcarts --input ${od}/${prefix}_selected_ensts_GRCh37.txt --ensembl ${od}/${prefix}_ensembl_$ens37.gz \
---series $series37 --ref $ref37 --output ${prefix}_GRCh37
+--series $series37 --ref $ref37 --gbk --output ${prefix}_GRCh37
 msg "Running FormatCARTs for GRCh38"
 $ROOTPATH/formatcarts --input ${od}/${prefix}_selected_ensts_GRCh38.txt --ensembl ${od}/${prefix}_ensembl_$ens38.gz \
---series $series38 --ref $ref38 --output ${prefix}_GRCh38 --prev_cava_db ${prefix}_GRCh37_cava.gz --prev_ref $ref37
+--series $series38 --ref $ref38 --gbk --output ${prefix}_GRCh38 --prev_cava_db ${prefix}_GRCh37_cava.gz --prev_ref $ref37
 
 # Run CompareENSTs
 msg "Running CompareENSTs"
