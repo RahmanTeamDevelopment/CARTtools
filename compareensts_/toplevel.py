@@ -81,12 +81,12 @@ def run(options):
         sys.stdout.flush()
 
         if enst1 not in dataX.keys():
-            flags.append('NFX')
+            flags.append('NF37')
         else:
             transcript = dataX[enst1]
 
         if enst2 not in dataY.keys():
-            flags.append('NFY')
+            flags.append('NF38')
         else:
             comparewith = [dataY[enst2]]
 
