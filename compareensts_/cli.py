@@ -26,63 +26,63 @@ def goodbye(name):
 def start_cli():
 
     parser = OptionParser(
-        description='Summarize v{}'.format(__version__),
-        usage='CARTtools/summarize <options>',
+        description='CompareENSTs v{}'.format(__version__),
+        usage='CARTtools/compareensts <options>',
         version=__version__
     )
 
     parser.add_option(
-        '--prefix',
+        '--input',
         default=None,
-        dest='prefix',
+        dest='input',
         action='store',
         help="..."
     )
 
     parser.add_option(
-        '--start',
+        '--enstsx',
         default=None,
-        dest='start',
-        action='store',
-        help="Start date/time"
-    )
-
-    parser.add_option(
-        '--end',
-        default=None,
-        dest='end',
-        action='store',
-        help="End date/time"
-    )
-
-    parser.add_option(
-        '--inputfn',
-        default=None,
-        dest='inputfn',
-        action='store',
-        help="Gene input file name used in the pipeline"
-    )
-
-    parser.add_option(
-        '--configfn',
-        default=None,
-        dest='configfn',
-        action='store',
-        help="Config file name used in the pipeline"
-    )
-
-    parser.add_option(
-        '--ens37',
-        default=None,
-        dest='ens37',
+        dest='enstsx',
         action='store',
         help="..."
     )
 
     parser.add_option(
-        '--ens38',
+        '--enstsy',
         default=None,
-        dest='ens38',
+        dest='enstsy',
+        action='store',
+        help="..."
+    )
+
+    parser.add_option(
+        '--datax',
+        default=None,
+        dest='dataX',
+        action='store',
+        help="Ensembl database file, release 1"
+    )
+
+    parser.add_option(
+        '--datay',
+        default=None,
+        dest='dataY',
+        action='store',
+        help="Ensembl database file, release 2"
+    )
+
+    parser.add_option(
+        '--ref37',
+        default=None,
+        dest='ref37',
+        action='store',
+        help="..."
+    )
+
+    parser.add_option(
+        '--ref38',
+        default=None,
+        dest='ref38',
         action='store',
         help="..."
     )
@@ -92,17 +92,30 @@ def start_cli():
         default=None,
         dest='output',
         action='store',
-        help="..."
+        help="Output file name"
     )
 
+    parser.add_option(
+        '--discr',
+        default=False,
+        dest='discr',
+        action='store_true',
+        help="Show only discrepant transcripts"
+    )
 
-
+    parser.add_option(
+        '--simple',
+        default=False,
+        dest='simple',
+        action='store_true',
+        help="Simple output"
+    )
 
     (options, args) = parser.parse_args()
 
-    welcome('Summarize')
+    welcome('CompareENSTs')
 
     toplevel.run(options)
 
-    goodbye('Summarize')
+    goodbye('CompareENSTs')
 

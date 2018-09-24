@@ -20,6 +20,7 @@ setup(
         'refseqdb_',
         'refseqcheck_',
         'ensembldb_',
+        'compareensts_',
         'summarize_'
     ],
     scripts=[
@@ -31,6 +32,7 @@ setup(
         'bin/RefSeqDB.py',
         'bin/RefSeqCheck.py',
         'bin/EnsemblDB.py',
+        'bin/CompareENSTs.py',
         'bin/Summarize.py'
     ],
     zip_safe=False

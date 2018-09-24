@@ -88,4 +88,6 @@ def run(options):
     for k, v in mapped_args.iteritems():
         args_to_pass.append('{}:{}'.format(k, v))
 
+    args_to_pass.append('conffn:{}'.format(options.config))
+
     subprocess.call(['{}/pipeline/pipeline.sh'.format(rootdir)] + args_to_pass)

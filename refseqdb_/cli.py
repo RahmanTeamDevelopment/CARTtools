@@ -43,7 +43,7 @@ def start_cli():
         default='ncbi',
         dest='mapping',
         action='store',
-        help='Mapping to use (ncbi or ucsc) [default value: %default]'
+        help='Mapping source (ncbi or ucsc) [default value: %default]'
     )
 
     parser.add_option(

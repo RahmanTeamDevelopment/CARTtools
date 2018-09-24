@@ -29,6 +29,9 @@ echo ""
 info "CART Pipeline started"
 echo ""
 
+# Start date/time
+start=$(python -c "from datetime import datetime; print(datetime.now().strftime('%Y-%m-%d_%H:%M:%S'))")
+
 # Absolute path to CARTtools
 ROOTPATH=$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pwd)
 
@@ -43,10 +46,10 @@ msg "Running RefSeqDB (NCBI interim RefSeq mapping) for GRCh38"
 $ROOTPATH/refseqdb --build GRCh38 --mapping ncbi --output ${od}/${prefix}_refseqdb_GRCh38_ncbi
 
 # Run RefSeqDB (UCSC mapping) for GRCh37 and GRCh38
-#msg "Running RefSeqDB (UCSC mapping) for GRCh37"
-#$ROOTPATH/refseqdb --build GRCh37 --mapping ucsc --output ${od}/${prefix}_refseqdb_GRCh37_ucsc
-#msg "Running RefSeqDB (UCSC mapping) for GRCh38"
-#$ROOTPATH/refseqdb --build GRCh38 --mapping ucsc --output ${od}/${prefix}_refseqdb_GRCh38_ucsc
+msg "Running RefSeqDB (UCSC mapping) for GRCh37"
+$ROOTPATH/refseqdb --build GRCh37 --mapping ucsc --output ${od}/${prefix}_refseqdb_GRCh37_ucsc
+msg "Running RefSeqDB (UCSC mapping) for GRCh38"
+$ROOTPATH/refseqdb --build GRCh38 --mapping ucsc --output ${od}/${prefix}_refseqdb_GRCh38_ucsc
 
 # Run RefSeqCheck (NCBI mapping) for GRCh37
 msg "Running RefSeqCheck (NCBI mapping) for GRCh37"
@@ -58,7 +61,7 @@ msg "Running SelectNMs"
 $ROOTPATH/selectnms --input_genes $inputgenes --appr $apprisfile --refsdb ${od}/${prefix}_refseqdb_GRCh37_ncbi.gz \
 --refschk ${od}/${prefix}_refseqcheck_output_GRCh37_ncbi.txt --genes $genesdict --build GRCh37 \
 --out_auto ${od}/${prefix}_nms_GRCh37 --refsdbinc ${od}/${prefix}_refseqdb_GRCh37_ncbi_included.txt \
---out_final ${od}/${prefix}_nms_GRCh37_final_selected
+--out ${od}/${prefix}_nms_GRCh37_final_selected
 
 # Run MapNMs for GRCh37 and GRCh38
 msg "Running MapNMs for GRCh37"
@@ -69,10 +72,10 @@ $ROOTPATH/mapnms --input ${od}/${prefix}_nms_GRCh37_final_selected.txt --ncbi ${
 --ucsc ${od}/${prefix}_refseqdb_GRCh38_ucsc.gz --hgncid_to_symbol $hgncidtosymbol --output ${od}/${prefix}_mapped_nms_GRCh38
 
 # Run EnsemblDB for GRCh37 and GRCh38
-#msg "Running EnsemblDB for GRCh37"
-#$ROOTPATH/ensembldb --release $ens37 --output ${od}/${prefix}_ensembl_$ens37
-#msg "Running EnsemblDB for GRCh38"
-#$ROOTPATH/ensembldb --release $ens38 --output ${od}/${prefix}_ensembl_$ens38
+msg "Running EnsemblDB for GRCh37"
+$ROOTPATH/ensembldb --release $ens37 --output ${od}/${prefix}_ensembl_$ens37
+msg "Running EnsemblDB for GRCh38"
+$ROOTPATH/ensembldb --release $ens38 --output ${od}/${prefix}_ensembl_$ens38
 
 # Run SelectENSTs for GRCh37 and GRCh38
 msg "Running SelectENSTs for GRCh37"
@@ -90,13 +93,19 @@ msg "Running FormatCARTs for GRCh38"
 $ROOTPATH/formatcarts --input ${od}/${prefix}_selected_ensts_GRCh38.txt --ensembl ${od}/${prefix}_ensembl_$ens38.gz \
 --series $series38 --ref $ref38 --output ${prefix}_GRCh38 --prev_cava_db ${prefix}_GRCh37_cava.gz --prev_ref $ref37
 
-# ENST comparison ...
-# ...
+# Run CompareENSTs
+msg "Running CompareENSTs"
+$ROOTPATH/compareensts --enstsx ${od}/${prefix}_selected_ensts_GRCh37.txt --enstsy ${od}/${prefix}_selected_ensts_GRCh38.txt \
+--datax ${od}/${prefix}_ensembl_$ens37.gz --datay ${od}/${prefix}_ensembl_$ens38.gz --ref37  $ref37 --ref38  $ref38 \
+--output ${od}/${prefix}_compared_ensts.txt --input $inputgenes
+
+# End date/time
+end=$(python -c "from datetime import datetime; print(datetime.now().strftime('%Y-%m-%d_%H:%M:%S'))")
 
 # Run Summarize
 msg "Running Summarize"
-$ROOTPATH/summarize --nms ${od}/${prefix}_nms_GRCh37_final_selected.txt --ensts37 ${od}/${prefix}_selected_ensts_GRCh37.txt \
---ensts38 ${od}/${prefix}_selected_ensts_GRCh38.txt --output ${prefix}_summary.txt
+$ROOTPATH/summarize --prefix ${od}/${prefix} --output $prefix --start $start --end $end --inputfn $inputgenes \
+--configfn $conffn --ens37 $ens37 --ens38 $ens38
 
 echo ""
 info "CART Pipeline finished"

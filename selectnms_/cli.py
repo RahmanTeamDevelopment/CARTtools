@@ -84,11 +84,11 @@ def start_cli():
         '--out_auto',
         dest='out',
         action='store',
-        help="Output file name"
+        help="Output file name prefix for automatic selection"
     )
 
     parser.add_option(
-        '--out_final',
+        '--out',
         dest='out_final',
         action='store',
         help="..."
