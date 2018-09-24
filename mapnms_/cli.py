@@ -36,7 +36,7 @@ def start_cli():
         default=None,
         dest='input',
         action='store',
-        help="Input file name"
+        help="Input file (output of SelectNMs)"
     )
 
     parser.add_option(
@@ -68,7 +68,7 @@ def start_cli():
         default='output',
         dest='output',
         action='store',
-        help="Output file name prefix [default value: %default]"
+        help="Output file name prefix"
     )
 
     parser.add_option(
@@ -76,7 +76,7 @@ def start_cli():
         default=None,
         dest='symbols',
         action='store',
-        help="Txt file for specifying gene symbols for missing HGNC IDs"
+        help="TXT file for specifying gene symbols for missing HGNC IDs"
     )
 
     (options, args) = parser.parse_args()

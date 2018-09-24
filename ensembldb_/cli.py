@@ -39,19 +39,19 @@ def start_cli():
     )
 
     parser.add_option(
-        '--output',
-        default=None,
-        dest='output',
-        action='store',
-        help="Output filename prefix"
-    )
-
-    parser.add_option(
         '--release',
         default=None,
         dest='ensembl',
         action='store',
         help="Ensembl release version"
+    )
+
+    parser.add_option(
+        '--output',
+        default=None,
+        dest='output',
+        action='store',
+        help="Output filename prefix"
     )
 
     (options, args) = parser.parse_args()

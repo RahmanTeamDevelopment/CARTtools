@@ -36,7 +36,7 @@ def start_cli():
         default='input',
         dest='input',
         action='store',
-        help="Input file name [default value: %default]"
+        help="Input file (output of SelectENSTs)"
     )
 
     parser.add_option(
@@ -44,7 +44,7 @@ def start_cli():
         default=None,
         dest='ensembl',
         action='store',
-        help="Ensembl transcript database"
+        help="Ensembl transcript database (output of EnsemblDB)"
     )
 
     parser.add_option(
@@ -52,7 +52,7 @@ def start_cli():
         default=None,
         dest='series',
         action='store',
-        help="Series code (e.g. CART37A)"
+        help="CARTs series code (e.g. CART37A)"
     )
 
     parser.add_option(
@@ -60,7 +60,7 @@ def start_cli():
         default='output',
         dest='output',
         action='store',
-        help="Output file name prefix [default value: %default]"
+        help="Output file name prefix"
     )
 
     parser.add_option(
@@ -68,7 +68,7 @@ def start_cli():
         default=False,
         dest='gbk',
         action='store_true',
-        help="Create GBK output [default value: %default]"
+        help="Create GBK output"
     )
 
     parser.add_option(
@@ -84,7 +84,7 @@ def start_cli():
         default=False,
         dest='annovar',
         action='store_true',
-        help="Create GenePred and FASTA files for Annovar [default value: %default]"
+        help="Create GenePred and FASTA files for Annovar"
     )
 
     parser.add_option(

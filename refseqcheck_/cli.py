@@ -33,7 +33,7 @@ def start_cli():
         default=None,
         dest='input',
         action='store',
-        help='Input RefSeq database file'
+        help='Input RefSeq database file (output of RefSeqDB)'
     )
 
     parser.add_option(
@@ -41,7 +41,7 @@ def start_cli():
         default=None,
         dest='reference',
         action='store',
-        help='Reference genome file'
+        help='Reference genome fasta file'
     )
 
     parser.add_option(
@@ -49,7 +49,7 @@ def start_cli():
         default='output.txt',
         dest='output',
         action='store',
-        help='Output file name [default value: %default]'
+        help='Output file name'
     )
 
     (options, args) = parser.parse_args()

@@ -34,7 +34,7 @@ def start_cli():
         default=None,
         dest='mapped_nms',
         action='store',
-        help="Mapped NMs data file"
+        help="Mapped NMs data file (output of MapMMs)"
     )
 
     parser.add_option(
@@ -42,7 +42,7 @@ def start_cli():
         default=None,
         dest='ensembl_data',
         action='store',
-        help="Ensembl data file"
+        help="Ensembl data file (output of EnsemblDB)"
     )
 
     parser.add_option(

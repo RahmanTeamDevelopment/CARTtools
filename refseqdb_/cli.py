@@ -35,7 +35,7 @@ def start_cli():
         default='GRCh37',
         dest='build',
         action='store',
-        help="Genome build [default value: %default]"
+        help="Genome build (GRCh37 or GRCh38)"
     )
 
     parser.add_option(
@@ -43,7 +43,7 @@ def start_cli():
         default='ncbi',
         dest='mapping',
         action='store',
-        help='Mapping source (ncbi or ucsc) [default value: %default]'
+        help='Mapping source (ncbi or ucsc)'
     )
 
     parser.add_option(
@@ -51,7 +51,7 @@ def start_cli():
         default='output',
         dest='output',
         action='store',
-        help='Output file name prefix [default value: %default]'
+        help='Output file name prefix'
     )
 
     (options, args) = parser.parse_args()

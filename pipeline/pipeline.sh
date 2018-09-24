@@ -95,8 +95,8 @@ $ROOTPATH/formatcarts --input ${od}/${prefix}_selected_ensts_GRCh38.txt --ensemb
 
 # Run CompareENSTs
 msg "Running CompareENSTs"
-$ROOTPATH/compareensts --enstsx ${od}/${prefix}_selected_ensts_GRCh37.txt --enstsy ${od}/${prefix}_selected_ensts_GRCh38.txt \
---datax ${od}/${prefix}_ensembl_$ens37.gz --datay ${od}/${prefix}_ensembl_$ens38.gz --ref37  $ref37 --ref38  $ref38 \
+$ROOTPATH/compareensts --ensts37 ${od}/${prefix}_selected_ensts_GRCh37.txt --ensts38 ${od}/${prefix}_selected_ensts_GRCh38.txt \
+--data37 ${od}/${prefix}_ensembl_$ens37.gz --data38 ${od}/${prefix}_ensembl_$ens38.gz --ref37  $ref37 --ref38  $ref38 \
 --output ${od}/${prefix}_compared_ensts.txt --input $inputgenes
 
 # End date/time

@@ -36,39 +36,39 @@ def start_cli():
         default=None,
         dest='input',
         action='store',
-        help="..."
+        help="Input file"
     )
 
     parser.add_option(
-        '--enstsx',
+        '--ensts37',
         default=None,
         dest='enstsx',
         action='store',
-        help="..."
+        help="Table of selected ENSTs for GRCh37 (output of SelectedENSTs)"
     )
 
     parser.add_option(
-        '--enstsy',
+        '--ensts38',
         default=None,
         dest='enstsy',
         action='store',
-        help="..."
+        help="Table of selected ENSTs for GRCh38 (output of SelectedENSTs)"
     )
 
     parser.add_option(
-        '--datax',
+        '--data37',
         default=None,
         dest='dataX',
         action='store',
-        help="Ensembl database file, release 1"
+        help="Ensembl database for GRCh37 (output of EnsemblDB)"
     )
 
     parser.add_option(
-        '--datay',
+        '--data38',
         default=None,
         dest='dataY',
         action='store',
-        help="Ensembl database file, release 2"
+        help="Ensembl database for GRCh38 (output of EnsemblDB)"
     )
 
     parser.add_option(
@@ -76,7 +76,7 @@ def start_cli():
         default=None,
         dest='ref37',
         action='store',
-        help="..."
+        help="Reference genome fasta file (GRCh37)"
     )
 
     parser.add_option(
@@ -84,7 +84,7 @@ def start_cli():
         default=None,
         dest='ref38',
         action='store',
-        help="..."
+        help="Reference genome fasta file (GRCh38)"
     )
 
     parser.add_option(
@@ -100,7 +100,7 @@ def start_cli():
         default=False,
         dest='discr',
         action='store_true',
-        help="Show only discrepant transcripts"
+        help="Output only ENST pairs where there are differences"
     )
 
     parser.add_option(
@@ -108,7 +108,7 @@ def start_cli():
         default=False,
         dest='simple',
         action='store_true',
-        help="Simple output"
+        help="Create simplified output"
     )
 
     (options, args) = parser.parse_args()

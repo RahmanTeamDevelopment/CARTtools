@@ -45,7 +45,7 @@ def start_cli():
         default=None,
         dest='appr',
         action='store',
-        help="APPRIS file"
+        help="APPRIS data file"
     )
 
     parser.add_option(
@@ -53,7 +53,7 @@ def start_cli():
         default=None,
         dest='refsdb',
         action='store',
-        help="RefSeq transcript database file"
+        help="RefSeq transcript database file (output of RefSeqDB)"
     )
 
     parser.add_option(
@@ -77,7 +77,7 @@ def start_cli():
         default=None,
         dest='build',
         action='store',
-        help="Genome build"
+        help="Genome build (GRCh37 or GRCh38)"
     )
 
     parser.add_option(
@@ -91,17 +91,15 @@ def start_cli():
         '--out',
         dest='out_final',
         action='store',
-        help="..."
+        help="Output file name prefix for final selection"
     )
 
     parser.add_option(
         '--refsdbinc',
         dest='refsdbinc',
         action='store',
-        help="..."
+        help="List of transcripts included in the RefSeq DB (output of RefSeqDB)"
     )
-
-
 
 
     (options, args) = parser.parse_args()

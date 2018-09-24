@@ -36,7 +36,7 @@ def start_cli():
         default=None,
         dest='prefix',
         action='store',
-        help="..."
+        help="Input file prefix"
     )
 
     parser.add_option(
@@ -76,7 +76,7 @@ def start_cli():
         default=None,
         dest='ens37',
         action='store',
-        help="..."
+        help="Ensembl transcript database (GRCh37)"
     )
 
     parser.add_option(
@@ -84,7 +84,7 @@ def start_cli():
         default=None,
         dest='ens38',
         action='store',
-        help="..."
+        help="Ensembl transcript database (GRCh38)"
     )
 
     parser.add_option(
@@ -92,7 +92,7 @@ def start_cli():
         default=None,
         dest='output',
         action='store',
-        help="..."
+        help="Output file name prefix"
     )
 
 
