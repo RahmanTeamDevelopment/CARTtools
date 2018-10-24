@@ -23,7 +23,7 @@ def count_final_records(fn):
             count += 1
             line = line.strip()
             cols = line.split('\t')
-            if cols[-2] == '.':
+            if cols[-1] == '.':
                 count_missing += 1
     return count, count_missing
 

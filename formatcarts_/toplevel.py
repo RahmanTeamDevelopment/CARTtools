@@ -11,6 +11,12 @@ def run(options):
         print '\nSeries code incorrect!\n'
         quit()
 
+    # ...
+    selected_ensts = helper.read_selected_ensts(options.selected_ensts)
+
+    # ...
+    canonical_ensts = helper.read_canonical_ensts(options.canonical)
+
     # Initialize reference sequence reader
     ref = reference.Reference(options.ref)
 
@@ -28,61 +34,87 @@ def run(options):
         prev_cava_db = None
 
     # Initialize output files
-    out_genepred, out_fasta, out_genepred_annovar, out_fasta_annovar, gbk_dir = helper.initialize_output_files(options)
+    out_genepred, out_fasta, out_genepred_annovar, out_fasta_annovar, gbk_dir, out_id, out_excl = helper.initialize_output_files(options)
 
     # Initialize progress info
-    sys.stdout.write('Processing {} ENSTs read from {} ... '.format(
-            helper.number_of_input_ensts(options.input), options.input
-        )
-    )
+    sys.stdout.write('Processing {} genes ... '.format(helper.number_of_genes(options.selected_nms)))
     sys.stdout.flush()
 
     # Initialize CART numbering
     cartidx = 10000 if options.prev_cava_db is None else helper.get_last_cartidx(options.prev_cava_db)
 
     # Iterate through input records
-    missing_list = []
+    count_excluded = 0
+    count_selected = 0
+    count_canonical = 0
     gff2_lines = {}
     gff3_lines = {}
-    for line in open(options.input):
+    for line in open(options.selected_nms):
         line = line.strip()
         if line == '' or line.startswith('#'):
             continue
         cols = line.split()
-        hgnc_id = cols[2]
-        enst = cols[3]
 
-        if enst == '.':
+        symbol = cols[0]
+        hgnc_id = cols[1]
+        assoc_nm = cols[-1]
+
+        if hgnc_id in selected_ensts and selected_ensts[hgnc_id] != '.':
+            enst = selected_ensts[hgnc_id]
+            selected = True
+        elif symbol in canonical_ensts:
+            enst = canonical_ensts[symbol]
+            selected = False
+        else:
+            out_excl.write('{}\t{}\t{}\n'.format(hgnc_id, symbol, 'no_selection_or_canonical'))
+            count_excluded += 1
             continue
 
-        # Add ENST to missing list if not found in Ensembl database
+        # Add to the list of excluded genes if ENST not found in Ensembl database
         if enst not in ensembl_db:
-            missing_list.append('{} (HGNC:{})'.format(enst, hgnc_id))
+            out_excl.write('{}\t{}\t{}\n'.format(hgnc_id, symbol, 'not_in_ensembl_db'))
+            count_excluded += 1
             continue
 
         # Retrieve data about ENST
         transcript = ensembl_db[enst]
 
-        # Calculating CART ID
-        if options.prev_cava_db is None:
-            cartidx += 1
-            cart_id = '{}{}'.format(options.series, cartidx)
-        else:
-            content = (
-                transcript.strand,
-                len(transcript.exons),
-                helper.read_mrna_sequence(transcript, ref)
-            )
+        if selected:
 
-            if hgnc_id in prev_cava_db and content == prev_cava_db[hgnc_id]['content']:
-                cart_id = '{}{}'.format(options.series, prev_cava_db[hgnc_id]['cartidx'])
-            else:
+            # Calculating CART ID
+            if options.prev_cava_db is None:
                 cartidx += 1
                 cart_id = '{}{}'.format(options.series, cartidx)
+            else:
+                content = (
+                    transcript.strand,
+                    len(transcript.exons),
+                    helper.read_mrna_sequence(transcript, ref)
+                )
 
-        # Add CART ID and HGNC ID to transcript
-        transcript.id = cart_id
+                if hgnc_id in prev_cava_db and content == prev_cava_db[hgnc_id]['content']:
+                    cart_id = '{}{}'.format(options.series, prev_cava_db[hgnc_id]['cartidx'])
+                else:
+                    cartidx += 1
+                    cart_id = '{}{}'.format(options.series, cartidx)
+
+
+            template_id = cart_id
+            count_selected += 1
+
+        else:
+            template_id = enst
+            count_canonical += 1
+
+        # Add template ID and HGNC ID to transcript
+        transcript.id = template_id
         transcript.hgnc_id = hgnc_id
+
+        transcript.assoc_nm = assoc_nm
+        transcript.assoc_enst = enst
+
+        # Write IDs to file
+        helper.output_ids(out_id, hgnc_id, template_id)
 
         # Add transcript to database writer
         tdb_writer.add(transcript)
@@ -118,9 +150,12 @@ def run(options):
         out_genepred,
         out_genepred_annovar,
         out_fasta_annovar,
-        gbk_dir
+        gbk_dir,
+        out_id,
+        out_excl
     )
 
     # Print out summary info
-    helper.print_summary_info(options, missing_list)
+    helper.print_summary_info(options, count_selected, count_canonical, count_excluded)
+
 

@@ -215,6 +215,7 @@ def output(out, nm, gene, ensts, flag, utr_selection_reason, phase1_difference_t
     record = [nm.id_, gene, nm.gene_id]
 
     if ensts is not None:
+        ensts = [ensts[0]]
         record += [
             ';'.join([x.id_ for x in ensts]),
             ';'.join([x.gene_symbol for x in ensts]),

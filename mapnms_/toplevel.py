@@ -10,7 +10,7 @@ def count_input_nms(fn):
             continue
         line = line.strip()
         cols = line.split('\t')
-        if cols[-2] != '.':
+        if cols[-1] != '.':
             count += 1
     return count
 
@@ -54,7 +54,7 @@ def run(options):
             continue
 
         cols = line.split()
-        nm = cols[-2]
+        nm = cols[-1]
 
         if nm == '.':
             continue

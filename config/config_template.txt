@@ -22,3 +22,5 @@ gene_synonyms = .
 [FormatCARTs]
 series_37 = .
 series_38 = .
+canonical_37 = .
+canonical_38 = .

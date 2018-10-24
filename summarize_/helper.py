@@ -4,10 +4,15 @@ import os
 
 def create_summary_table(options):
 
+    full = os.path.dirname(os.path.realpath(__file__))
+    rootdir = full[:full.rfind('/env')]
+
     nms_data, header_original = read_nms('{}_nms_GRCh37_final_selected.txt'.format(options.prefix))
     ensts_37 = read_ensts('{}_selected_ensts_GRCh37.txt'.format(options.prefix))
     ensts_38 = read_ensts('{}_selected_ensts_GRCh38.txt'.format(options.prefix))
     compared_ensts = read_compared_ensts('{}_compared_ensts.txt'.format(options.prefix))
+    ids_37 = read_ids('{}_GRCh37_ids.txt'.format(options.output))
+    ids_38 = read_ids('{}_GRCh38_ids.txt'.format(options.output))
 
     out = open('{}_summary.txt'.format(options.output), 'w')
 
@@ -18,19 +23,23 @@ def create_summary_table(options):
         'Selected_ENST_38',
         'UTR_DIFF_38',
         'UTR_EXON_NUM_DIFF_38',
-        'ENST_DIFF'
+        'ENST_DIFF',
+        'ID_37',
+        'ID_38'
     ]
     out.write('\t'.join(header) + '\n')
 
     for k, v in nms_data.iteritems():
 
-        if k in ensts_37:
-            enst37 = ensts_37[k]
+        hgnc_id = nms_data[k][0]
+
+        if hgnc_id in ensts_37:
+            enst37 = ensts_37[hgnc_id]
         else:
             enst37 = None
 
-        if k in ensts_38:
-            enst38 = ensts_38[k]
+        if hgnc_id in ensts_38:
+            enst38 = ensts_38[hgnc_id]
         else:
             enst38 = None
 
@@ -44,12 +53,22 @@ def create_summary_table(options):
         else:
             columns38 = ['No_ENST'] * 3
 
-        if k in compared_ensts:
-            enst_diff = compared_ensts[k]
+        if hgnc_id in compared_ensts:
+            enst_diff = compared_ensts[hgnc_id]
         else:
             enst_diff = 'No_ENST_pair'
 
-        out.write('\t'.join([k] + nms_data[k] + columns37 + columns38 + [enst_diff]) + '\n')
+        if hgnc_id in ids_37:
+            cart_id_37 = ids_37[hgnc_id]
+        else:
+            cart_id_37 = '.'
+
+        if hgnc_id in ids_38:
+            cart_id_38 = ids_38[hgnc_id]
+        else:
+            cart_id_38 = '.'
+
+        out.write('\t'.join([k] + nms_data[k] + columns37 + columns38 + [enst_diff] + [cart_id_37, cart_id_38]) + '\n')
 
     out.close()
 
@@ -163,8 +182,25 @@ def create_report(options):
     out.write('Identical ENSTs: {}\n'.format(count_identical))
     out.write('ENSTs with identical CDS: {}\n'.format(count_cds_identical))
 
+    out_section(out, '8 - Genes outputted')
+    count_all_37, count_selected_37, count_canonical_37 = count_outputted_genes('{}_GRCh37_ids.txt'.format(options.output))
+    count_excluded_37 = count_excluded_genes('{}_GRCh37_excl.txt'.format(options.output))
+    count_all_38, count_selected_38, count_canonical_38 = count_outputted_genes('{}_GRCh38_ids.txt'.format(options.output))
+    count_excluded_38 = count_excluded_genes('{}_GRCh38_excl.txt'.format(options.output))
+    out.write('GRCh37: {} genes outputted (selected CART: {}, canonical ENST: {}) - {} genes excluded\n'.format(
+        count_all_37,
+        count_selected_37,
+        count_canonical_37,
+        count_excluded_37
+    ))
+    out.write('GRCh38: {} genes outputted (selected CART: {}, canonical ENST: {}) - {} genes excluded\n'.format(
+        count_all_38,
+        count_selected_38,
+        count_canonical_38,
+        count_excluded_38
+    ))
 
-    out_section(out, '8 - Outputs')
+    out_section(out, '9 - Outputs')
     out.write('Output files: {}/\n'.format(cwd))
     out.write('Intermediate files: {}/cart_pipeline_files/\n'.format(cwd))
 
@@ -210,6 +246,18 @@ def read_ensts(fn):
     return ret
 
 
+def read_ids(fn):
+
+    ret = {}
+    for line in open(fn):
+        line = line.strip()
+        if line[0] == '#' or line == '':
+            continue
+        cols = line.split('\t')
+        ret[cols[0]] = cols[1]
+    return ret
+
+
 def out_section(out, s):
 
     out.write('\n{}\n'.format(s))
@@ -236,7 +284,7 @@ def count_genes(fn):
         if line == '' or line[0] == '#':
             continue
         cols = line.split('\t')
-        if cols[29] == '.':
+        if cols[14] == '.':
             missing += 1
         else:
             selected += 1
@@ -299,6 +347,35 @@ def count_compared_ensts(fn):
     return count_all, count_identical, count_cds_identical
 
 
+def count_outputted_genes(fn):
+
+    count_all = 0
+    count_selected = 0
+    count_canonical = 0
+    for line in open(fn):
+        line = line.strip()
+        if line == '' or line[0] == '#':
+            continue
+        cols = line.split('\t')
+        count_all += 1
+        if 'CART' in cols[1]:
+            count_selected += 1
+        else:
+            count_canonical += 1
+    return count_all, count_selected, count_canonical
+
+
+def count_excluded_genes(fn):
+
+    count = 0
+    for line in open(fn):
+        line = line.strip()
+        if line == '' or line[0] == '#':
+            continue
+        count += 1
+    return count
+
+
 def read_compared_ensts(fn):
 
     ret = {}
@@ -311,3 +388,13 @@ def read_compared_ensts(fn):
     return ret
 
 
+def read_gdm_categories(fn):
+
+    ret = {}
+    for line in open(fn):
+        line = line.strip()
+        if line == '' or line[0] == '#':
+            continue
+        cols = line.split('\t')
+        ret[cols[3]] = cols[2]
+    return ret

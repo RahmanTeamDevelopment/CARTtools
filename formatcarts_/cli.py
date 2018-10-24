@@ -32,11 +32,24 @@ def start_cli():
     )
 
     parser.add_option(
-        '--input',
-        default='input',
-        dest='input',
+        '--selected_nms',
+        dest='selected_nms',
         action='store',
-        help="Input file (output of SelectENSTs)"
+        help="Final selected NMs file (output of SelectNMs)"
+    )
+
+    parser.add_option(
+        '--selected_ensts',
+        dest='selected_ensts',
+        action='store',
+        help="Selected ENSTs file (output of SelectENSTs)"
+    )
+
+    parser.add_option(
+        '--canonical',
+        dest='canonical',
+        action='store',
+        help="Canonical ENSTs file"
     )
 
     parser.add_option(

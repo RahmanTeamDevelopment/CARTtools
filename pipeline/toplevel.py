@@ -44,6 +44,8 @@ def map_keys(config):
         'selectensts.gene_synonyms': 'genesynonyms',
         'formatcarts.series_37': 'series37',
         'formatcarts.series_38': 'series38',
+        'formatcarts.canonical_37': 'canonical37',
+        'formatcarts.canonical_38': 'canonical38',
         'output_prefix': 'prefix'
     }
 
@@ -65,6 +67,8 @@ def add_default_values(c, rootdir):
         'genesynonyms': '{}/default/gene_synonyms.txt'.format(rootdir),
         'series37': 'CART37A',
         'series38': 'CART38A',
+        'canonical37': '{}/default/canonical_enst_v75.txt'.format(rootdir),
+        'canonical38': '{}/default/canonical_enst_v92.txt'.format(rootdir),
         'prefix': 'output'
     }
 

@@ -34,6 +34,10 @@ def create_gff2_lines(transcript, gff2_lines):
     # Exons
     for i in range(len(transcript.exons)):
         exon = transcript.exons[i]
+        if transcript.assoc_nm != '.':
+            ids_field = 'CART {}; ENST {}; NM {}'.format(transcript.id, transcript.assoc_enst, transcript.assoc_nm)
+        else:
+            ids_field = 'CART {}; ENST {}'.format(transcript.id, transcript.assoc_enst)
         gff2_lines[transcript.chrom].append(
             [
                 'chr' + transcript.chrom,
@@ -44,7 +48,7 @@ def create_gff2_lines(transcript, gff2_lines):
                 '.',
                 transcript.strand,
                 '.',
-                '{}'.format(transcript.id)
+                ids_field
             ]
         )
 
@@ -61,6 +65,10 @@ def create_gff2_lines(transcript, gff2_lines):
         else:
             phase = 1
 
+        if transcript.assoc_nm != '.':
+            ids_field = 'CART {}; ENST {}; NM {}'.format(transcript.id, transcript.assoc_enst, transcript.assoc_nm)
+        else:
+            ids_field = 'CART {}; ENST {}'.format(transcript.id, transcript.assoc_enst)
         gff2_lines[transcript.chrom].append(
             [
                 'chr' + transcript.chrom,
@@ -71,7 +79,7 @@ def create_gff2_lines(transcript, gff2_lines):
                 '.',
                 transcript.strand,
                 str(phase),
-                '{}'.format(transcript.id)
+                ids_field
             ]
         )
 
@@ -85,7 +93,16 @@ def create_gff3_lines(transcript, gff3_lines):
     if transcript.chrom not in gff3_lines:
         gff3_lines[transcript.chrom] = []
 
-    attr = ';'.join(['ID=' + transcript.id, 'hgnc_id=' + transcript.hgnc_id, 'gene_symbol=' + transcript.gene_symbol, 'biotype=protein_coding'])
+    attr = ';'.join(
+        [
+            'ID=' + transcript.id,
+            'hgnc_id=' + transcript.hgnc_id,
+            'gene_symbol=' + transcript.gene_symbol,
+            'biotype=protein_coding',
+            'assoc_nm=' + transcript.assoc_nm,
+            'assoc_enst=' + transcript.assoc_enst
+        ]
+    )
     gff3_lines[transcript.chrom].append([transcript.chrom, '.', 'transcript', transcript.start + 1, transcript.end, '.', transcript.strand, '.', attr])
 
     # Exons
@@ -176,7 +193,7 @@ def output_genepred(transcript, outfile):
                 ''.join([str(e.start)+',' for e in exons]),
                 ''.join([str(e.end)+',' for e in exons]),
                 '0',
-                'HGNC:'+transcript.hgnc_id,
+                transcript.hgnc_id,
                 'cmpl',
                 'cmpl',
                 ''.join(frame_offsets(transcript))
@@ -216,6 +233,11 @@ def output_fasta_annovar(transcript, outfile, ref):
     while len(s)>0:
         outfile.write(s[:width]+'\n')
         s = s[width:]
+
+
+def output_ids(outfile, hgnc_id, cart_id):
+
+    outfile.write('{}\t{}\n'.format(hgnc_id, cart_id))
 
 
 def get_coding_sequence(transcript, ref):
@@ -449,16 +471,14 @@ def complement(b):
         return x.lower()
 
 
-def number_of_input_ensts(fn):
+def number_of_genes(fn):
 
     ret = 0
     for line in open(fn):
         line = line.strip()
         if line=='' or line.startswith('#'):
             continue
-        cols = line.split('\t')
-        if cols[3] != '.':
-            ret += 1
+        ret += 1
     return ret
 
 
@@ -481,14 +501,26 @@ def initialize_output_files(options):
             shutil.rmtree(gbk_dir)
         os.makedirs(gbk_dir)
 
-    return out_genepred, out_fasta, out_genepred_annovar, out_fasta_annovar, gbk_dir
+    # Initializing ID output
+    out_id = open(options.output + '_ids.txt', 'w')
+    out_id.write('#HGNC_ID\tID\n')
+
+    # Initializing output for excluded genes
+    out_excl = open(options.output + '_excl.txt', 'w')
+    out_excl.write('#HGNC_ID\tGENE_SYMBOL\tREASON\n')
+
+    return out_genepred, out_fasta, out_genepred_annovar, out_fasta_annovar, gbk_dir, out_id, out_excl
 
 
-def finalize_outputs(options, tdb_writer, out_fasta, out_genepred, out_genepred_annovar, out_fasta_annovar, gbk_dir):
+def finalize_outputs(options, tdb_writer, out_fasta, out_genepred, out_genepred_annovar, out_fasta_annovar, gbk_dir, out_id, out_excl):
 
     tdb_writer.finalize(options)
 
     out_fasta.close()
+
+    out_id.close()
+
+    out_excl.close()
 
     pysam.faidx(options.output + '.fa')
 
@@ -529,15 +561,9 @@ def initialize_transcript_db_writer(options):
     return tdb_writer
 
 
-def print_summary_info(options, missing_list):
+def print_summary_info(options, count_selected, count_canonical, count_excluded):
 
     print 'done'
-
-    if len(missing_list) > 0:
-        print '\nMissing from the Ensembl database:'
-        for x in missing_list:
-            print '  - ' + x
-
     print '\nOutput files:'
     print ' - CAVA database: {}_cava.gz (+.tbi)'.format(options.output)
     print ' - GFF2 file: {}.gff2.gz (+.tbi)'.format(options.output)
@@ -549,9 +575,11 @@ def print_summary_info(options, missing_list):
         print ' - Annovar FASTA file: {} (+.fai)'.format('{}_refGeneMrna.fa'.format(options.output))
     if options.gbk:
         print ' - GenBank (GBK) files: {}_gbk.zip'.format(options.output)
-
-    if len(missing_list) > 0:
-        print '\nWarning! {} CARTs were missing! (see list above)'.format(len(missing_list))
+    print ''
+    print 'Genes for which ENST was selected by pipeline: {}'.format(count_selected)
+    print 'Genes for which canonical ENST was used: {}'.format(count_canonical)
+    print 'Table of IDs: {}_ids.txt'.format(options.output)
+    print '\nExcluded genes: {} ({})'.format(count_excluded, '{}_excl.txt'.format(options.output))
 
 
 def get_last_cartidx(fn):
@@ -564,6 +592,9 @@ def get_last_cartidx(fn):
             continue
 
         cols = line.split()
+
+        if cols[0].startswith('ENST'):
+            continue
 
         cartidx = int(cols[0][-5:])
 
@@ -587,6 +618,9 @@ def read_prev_cava_db(fn, ref):
         cols = line.split()
         hgnc_id = cols[2]
 
+        if cols[0].startswith('ENST'):
+            continue
+
         ret[hgnc_id] = {
             'cartidx': cols[0][-5:],
             'content': (
@@ -598,3 +632,30 @@ def read_prev_cava_db(fn, ref):
 
     return ret
 
+
+def read_selected_ensts(fn):
+
+    ret = {}
+    for line in open(fn):
+
+        line = line.strip()
+        if line == '' or line[0] == '#':
+            continue
+        cols = line.split()
+        ret['HGNC:'+cols[2]] = cols[3]
+
+    return ret
+
+
+def read_canonical_ensts(fn):
+
+    ret = {}
+    for line in open(fn):
+
+        line = line.strip()
+        if line == '' or line[0] == '#':
+            continue
+        cols = line.split()
+        ret[cols[0]] = cols[1]
+
+    return ret
