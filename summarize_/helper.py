@@ -183,9 +183,15 @@ def create_report(options):
     out.write('ENSTs with identical CDS: {}\n'.format(count_cds_identical))
 
     out_section(out, '8 - Genes outputted')
-    count_all_37, count_selected_37, count_canonical_37 = count_outputted_genes('{}_GRCh37_ids.txt'.format(options.output))
+    count_all_37, count_selected_37, count_canonical_37 = count_outputted_genes(
+        '{}_GRCh37_ids.txt'.format(options.output),
+        '{}_GRCh37_excl.txt'.format(options.output)
+    )
     count_excluded_37 = count_excluded_genes('{}_GRCh37_excl.txt'.format(options.output))
-    count_all_38, count_selected_38, count_canonical_38 = count_outputted_genes('{}_GRCh38_ids.txt'.format(options.output))
+    count_all_38, count_selected_38, count_canonical_38 = count_outputted_genes(
+        '{}_GRCh38_ids.txt'.format(options.output),
+        '{}_GRCh38_excl.txt'.format(options.output)
+    )
     count_excluded_38 = count_excluded_genes('{}_GRCh38_excl.txt'.format(options.output))
     out.write('GRCh37: {} genes outputted (selected CART: {}, canonical/longest ENST: {}) - {} genes excluded\n'.format(
         count_all_37,
@@ -347,16 +353,28 @@ def count_compared_ensts(fn):
     return count_all, count_identical, count_cds_identical
 
 
-def count_outputted_genes(fn):
+def count_outputted_genes(fn_ids, fn_excl):
 
-    count_all = 0
-    count_selected = 0
-    count_canonical = 0
-    for line in open(fn):
+    excluded = []
+    for line in open(fn_excl):
         line = line.strip()
         if line == '' or line[0] == '#':
             continue
         cols = line.split('\t')
+        excluded.append(cols[0])
+
+    count_all = 0
+    count_selected = 0
+    count_canonical = 0
+    for line in open(fn_ids):
+        line = line.strip()
+        if line == '' or line[0] == '#':
+            continue
+        cols = line.split('\t')
+
+        if cols[0] in excluded:
+            continue
+
         count_all += 1
         if 'CART' in cols[1]:
             count_selected += 1
