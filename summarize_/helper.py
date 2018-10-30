@@ -187,13 +187,13 @@ def create_report(options):
     count_excluded_37 = count_excluded_genes('{}_GRCh37_excl.txt'.format(options.output))
     count_all_38, count_selected_38, count_canonical_38 = count_outputted_genes('{}_GRCh38_ids.txt'.format(options.output))
     count_excluded_38 = count_excluded_genes('{}_GRCh38_excl.txt'.format(options.output))
-    out.write('GRCh37: {} genes outputted (selected CART: {}, canonical ENST: {}) - {} genes excluded\n'.format(
+    out.write('GRCh37: {} genes outputted (selected CART: {}, canonical/longest ENST: {}) - {} genes excluded\n'.format(
         count_all_37,
         count_selected_37,
         count_canonical_37,
         count_excluded_37
     ))
-    out.write('GRCh38: {} genes outputted (selected CART: {}, canonical ENST: {}) - {} genes excluded\n'.format(
+    out.write('GRCh38: {} genes outputted (selected CART: {}, canonical/longest ENST: {}) - {} genes excluded\n'.format(
         count_all_38,
         count_selected_38,
         count_canonical_38,

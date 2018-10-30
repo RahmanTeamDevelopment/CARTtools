@@ -561,7 +561,7 @@ def initialize_transcript_db_writer(options):
     return tdb_writer
 
 
-def print_summary_info(options, count_selected, count_canonical, count_excluded):
+def print_summary_info(options, count_selected, count_canonical_or_longest, count_excluded):
 
     print 'done'
     print '\nOutput files:'
@@ -577,7 +577,7 @@ def print_summary_info(options, count_selected, count_canonical, count_excluded)
         print ' - GenBank (GBK) files: {}_gbk.zip'.format(options.output)
     print ''
     print 'Genes for which ENST was selected by pipeline: {}'.format(count_selected)
-    print 'Genes for which canonical ENST was used: {}'.format(count_canonical)
+    print 'Genes for which canonical/longest ENST was used: {}'.format(count_canonical_or_longest)
     print 'Table of IDs: {}_ids.txt'.format(options.output)
     print '\nExcluded genes: {} ({})'.format(count_excluded, '{}_excl.txt'.format(options.output))
 

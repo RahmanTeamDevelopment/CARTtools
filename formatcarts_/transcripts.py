@@ -32,6 +32,11 @@ class Transcript(object):
             self.exons.append(Exon('{}-{}'.format(cols[10 + i], cols[11 + i])))
 
 
+    def transcript_length(self):
+
+        return int(self.info.split('/')[-1])
+
+
     def cds_regions(self):
         """Return list of CDS regions
 
@@ -138,6 +143,39 @@ def read_ensembl_db(fn):
         ret[transcript.id] = transcript
 
     return ret
+
+
+def read_ensembl_db_by_symbol(fn):
+
+    ret = {}
+
+    for line in gzip.open(fn):
+
+        line = line.strip()
+        if line == '' or line[0] == '#':
+            continue
+
+        transcript = Transcript(line)
+
+        if transcript.gene_symbol not in ret:
+            ret[transcript.gene_symbol] = []
+
+        ret[transcript.gene_symbol].append(transcript)
+
+    return ret
+
+
+def find_longest_transcript(transcripts):
+
+    ret = None
+    max_length = -1
+    for t in transcripts:
+        L = t.transcript_length()
+        if L > max_length:
+            ret = t
+            max_length = L
+    return ret
+
 
 
 class TranscriptDBWriter(object):
