@@ -17,15 +17,15 @@ def create_summary_table(options):
     out = open('{}_summary.txt'.format(options.output), 'w')
 
     header = header_original.split('\t') + [
-        'Selected_ENST_37',
+        'CART_ASSOCIATED_ENST_37',
         'UTR_DIFF_37',
         'UTR_EXON_NUM_DIFF_37',
-        'Selected_ENST_38',
+        'CART_ASSOCIATED_ENST_38',
         'UTR_DIFF_38',
         'UTR_EXON_NUM_DIFF_38',
-        'ENST_DIFF',
-        'ID_37',
-        'ID_38'
+        'CART37_and_CART38_DIFF',
+        'CART_ID_37',
+        'CART_ID_38'
     ]
     out.write('\t'.join(header) + '\n')
 

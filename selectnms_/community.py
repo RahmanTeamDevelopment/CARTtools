@@ -308,8 +308,8 @@ def run(options, automated_selection_fn, automated_missing_fn):
         'HGNC_ID',
         'NCBI.Gene',
         'GDM_Colour',
-        'Automated_NM',
-        'Automated_NM_Version',
+        'Algorithmic_NM',
+        'Algorithmic_NM_Version',
         'UTRDifferenceType',
         'UTRDecisiveCriteria',
         'GenomeDifference',
@@ -318,7 +318,7 @@ def run(options, automated_selection_fn, automated_missing_fn):
         'RefSeqGene_NMs',
         'ClinVar_NMs',
         'Community_NM',
-        'CART_NM',
+        'CART_Associated_NM',
     ]
     out_file.write('#{}\n'.format('\t'.join(header)))
 
