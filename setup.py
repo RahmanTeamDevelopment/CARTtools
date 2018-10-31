@@ -5,8 +5,8 @@ exec(open('main/version.py').read())
 setup(
     name='CARTtools',
     version=__version__,
-    description='CARTtools is ...',
-    url='x@x',
+    description='A collection of tools for selecting and outputting CARTs (Clinical Annotation Reference Templates)',
+    url='https://github.com/RahmanTeamDevelopment/CARTtools',
     author='RahmanTeam',
     author_email='rahmanlab@icr.ac.uk',
     licence='MIT',
