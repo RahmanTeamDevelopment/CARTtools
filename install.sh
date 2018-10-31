@@ -18,5 +18,5 @@ pip install --no-cache-dir --ignore-installed --force-reinstall --upgrade pip
 pip install ${PIP_ARGS} -r requirements.txt
 pip install -U .
 
-#test/smoke/test_installation.sh
+test/smoke/test_installation.sh
 

@@ -11,7 +11,7 @@ reset=`tput sgr0`
 
 echo "Smoke test of installation:"
 
-./cart2enst --help &> /dev/null
+./cart_pipeline --help &> /dev/null
 
 if [ $? != 0 ]
 then
